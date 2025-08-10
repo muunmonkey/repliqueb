@@ -1,0 +1,20 @@
+{
+  "products": [
+    {
+      "slug": "prada-nylon-mini-black",
+      "title": "Nylon Mini",
+      "brand": "Prada",
+      "category": "Mini Bag",
+      "color": "Black",
+      "material": "Nylon",
+      "price": 890,
+      "tags": ["new","crossbody"],
+      "images": [
+        {"url": "/images/uploads/prada-mini-1.jpg", "alt": "Prada nylon mini bag front"},
+        {"url": "/images/uploads/prada-mini-2.jpg", "alt": "Prada nylon mini bag side"}
+      ],
+      "video": "",
+      "description": "Compact nylon mini bag with adjustable crossbody strap."
+    }
+  ]
+}

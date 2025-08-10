@@ -1,0 +1,558 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Handbags — IG Style</title>
+  <meta name="color-scheme" content="dark only">
+  <style>
+    :root{ --header-h:64px; --gap:10px; --accent:#F4E38A }
+    *{ box-sizing:border-box }
+    html,body{ height:100% }
+    body{ margin:0; background:#0b0b0b; color:#e6e6e6; font:14px/1.45 system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial }
+    a{ color:inherit }
+
+    /* Fixed header: logo left, search icon right */
+    header{
+      position:fixed; top:0; left:0; right:0; z-index:3000;
+      display:flex; align-items:center; justify-content:center;
+      height:var(--header-h); background:transparent;
+      padding:0 14px;
+    }
+    header .inner{ position:relative; width:100%; max-width:1200px; display:flex; align-items:center; justify-content:center; }
+    .logo{
+      position:absolute; left:14px; top:50%; transform:translateY(-50%);
+      font-weight:800; font-size:18px; letter-spacing:.18em; text-transform:uppercase;
+      text-decoration:none;
+    }
+    .logo:hover{ opacity:.9 }
+    .actions{ position:absolute; right:14px; top:50%; transform:translateY(-50%); display:flex; gap:8px; }
+    .search-btn{ border:0; background:transparent; padding:8px; cursor:pointer }
+    .search-btn svg{ width:22px; height:22px; display:block; fill:#e6e6e6 }
+
+    body{ padding-top:var(--header-h) }
+
+    /* Grid feed */
+    .grid{
+      width:100%; max-width:1200px; margin:0 auto; padding:10px;
+      display:grid; grid-template-columns:repeat(2, 1fr); gap:var(--gap);
+    }
+    @media (min-width:700px){ .grid{ grid-template-columns:repeat(3, 1fr) } }
+    @media (min-width:1100px){ .grid{ grid-template-columns:repeat(5, 1fr) } }
+
+    article.card{
+      background:#111; border-radius:12px; overflow:hidden;
+      display:flex; flex-direction:column; gap:8px;
+    }
+    .card .media{ position:relative; aspect-ratio:4/5; background:#000; isolation:isolate; }
+    .card .media img, .card .media video{ width:100%; height:100%; object-fit:cover; display:block; }
+
+    .badge-new{
+      position:absolute; left:8px; top:8px; z-index:5; padding:6px 10px; border-radius:999px;
+      font:700 11px/1 system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial;
+      letter-spacing:.06em; text-transform:uppercase; pointer-events:none;
+      color:#fff; background:transparent; mix-blend-mode:difference; border:1px solid rgba(255,255,255,.85);
+    }
+    @supports not (mix-blend-mode:difference){
+      .badge-new{ background:rgba(0,0,0,.55); color:#fff; border-color:rgba(255,255,255,.25) }
+    }
+
+    .meta{
+      display:flex; justify-content:space-between; align-items:center; gap:10px;
+      padding:0 4px 10px 4px;
+    }
+    .title{ font-weight:650; font-size:13px; line-height:1.2; }
+    .sub{ opacity:.8; font-size:12px; margin-top:2px }
+    .stack{ display:flex; flex-direction:column }
+
+    /* Viewer overlay */
+    .overlay{ position:fixed; inset:0; background:rgba(0,0,0,.8); display:none; z-index:4000 }
+    .overlay.open{ display:block }
+    .sheet{
+      position:fixed; inset:0; display:none; z-index:4010;
+      background:#0b0b0b;
+    }
+    .sheet.open{ display:block }
+    .sheet .body{
+      height:100%; display:grid; grid-template-columns:1fr; align-items:start;
+    }
+    @media (min-width:1024px){
+      .sheet .body{
+        grid-template-columns:minmax(520px,58%) minmax(360px,42%);
+      }
+    }
+    .frame{ position:relative; background:#000; height:100%; }
+    .frame .media{ position:relative; aspect-ratio:4/5; height:100%; }
+    @media (min-width:1024px){
+      .frame{ position:sticky; top:0; height:100vh; }
+      .frame .media{ height:100%; }
+    }
+    .slides{
+      display:flex; overflow-x:auto; scroll-snap-type:x mandatory; -webkit-overflow-scrolling:touch;
+      touch-action:pan-x; gap:0; width:100%; height:100%;
+    }
+    .slides > *{ flex:0 0 100%; width:100%; height:100%; scroll-snap-align:center }
+    .slides img, .slides video{ width:100%; height:100%; object-fit:contain; background:#000 }
+    .dots{ position:absolute; left:50%; transform:translateX(-50%); bottom:10px; display:flex; gap:6px; z-index:6 }
+    .dot{ width:6px; height:6px; border-radius:999px; background:#cfcfcf; opacity:.5 }
+    .dot.is-active{ opacity:1; transform:scale(1.2) }
+    .slide-indicator{
+      position:absolute; right:10px; top:10px; z-index:6;
+      padding:6px 8px; border-radius:999px; font:600 12px/1 system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial;
+      color:#fff; background:rgba(0,0,0,.35); backdrop-filter:saturate(1.2) blur(2px);
+    }
+    @supports (mix-blend-mode:difference){
+      .slide-indicator{ mix-blend-mode:difference; background:transparent; border:1px solid rgba(255,255,255,.75) }
+    }
+
+    .detail{
+      padding:16px; overflow:auto; max-height:100vh;
+    }
+    .detail h2{ margin:0 0 6px 0; font-size:18px }
+    .detail .line{ opacity:.85; margin-bottom:8px }
+
+    /* Request quote button: viewer only */
+    #wa-quote{
+      position:fixed; left:50%; transform:translateX(-50%);
+      bottom:calc(env(safe-area-inset-bottom,0) + 14px);
+      z-index:5200; display:none; align-items:center; gap:10px;
+      padding:12px 16px; border-radius:999px; background:#25D366; color:#0c0c0c;
+      font:600 14px/1 system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial; text-decoration:none;
+      box-shadow:0 10px 26px rgba(0,0,0,.35);
+    }
+    #wa-quote svg{ width:18px; height:18px; display:block; fill:#0c0c0c }
+    html.viewer-open #wa-quote{ display:flex }
+
+    /* Search overlay */
+    #search-overlay{ position:fixed; inset:0; z-index:4300; display:none; background:rgba(0,0,0,.6) }
+    #search-overlay.open{ display:block }
+    #search-overlay .search-panel{
+      position:absolute; left:50%; top:50%; transform:translate(-50%,-50%);
+      width:min(840px,78vw); max-height:80vh; overflow:auto; background:#111; border-radius:12px;
+      padding:16px;
+    }
+    .search-head{ display:flex; align-items:center; gap:10px }
+    .search-input{ flex:1 1 auto; min-height:44px; padding:10px 12px; border-radius:8px; border:1px solid #2a2a2a; background:#0b0b0b; color:#e6e6e6 }
+    .search-clear{ background:transparent; border:1px solid #2a2a2a; color:#d9d9d9; border-radius:8px; padding:8px 10px; cursor:pointer }
+    .search-style-link{ margin-top:6px; display:inline-flex; align-items:center; gap:6px; color:var(--accent); text-decoration:none; font-weight:600; opacity:.95 }
+    .search-style-link svg{ width:14px; height:14px; fill:currentColor; display:block }
+    .search-subbar{
+      position:sticky; top:0; z-index:2; display:flex; align-items:center; justify-content:space-between; gap:8px;
+      padding:8px 0; margin-top:8px; border-bottom:1px solid rgba(255,255,255,.08);
+      background:rgba(0,0,0,.15); backdrop-filter:saturate(1.2) blur(2px);
+    }
+    .search-list{ margin-top:8px }
+    .search-item{
+      display:grid; grid-template-columns:68px 1fr auto; align-items:center; gap:12px;
+      padding:10px 6px; border-radius:10px; opacity:0; transform:translateY(4px); transition:opacity .16s ease, transform .16s ease;
+    }
+    .search-item.show{ opacity:1; transform:translateY(0) }
+    .search-item:hover{ background:rgba(255,255,255,.04) }
+    .search-thumb{ width:68px; height:68px; border-radius:8px; object-fit:cover }
+    .search-title{ font-weight:650 }
+    .search-sub{ opacity:.8; font-size:.95em; margin-top:2px }
+    .search-price{ opacity:.9; font-weight:650; margin-left:8px }
+    mark.hl{ background:transparent; color:#ffd54a; font-weight:700 }
+
+    @media (max-width:560px){
+      #search-overlay .search-panel{ left:0; top:0; transform:none; width:100vw; height:100vh; border-radius:0; padding:12px }
+      .search-head{ gap:8px }
+      .search-input{ min-height:46px }
+      .search-list{ max-height:calc(100vh - 150px) }
+    }
+
+    /* Accessibility: focus styles */
+    :focus-visible{ outline:2px solid #7aa2ff; outline-offset:2px }
+
+    /* Hide any old viewer footer if it exists */
+    .sheet .footer, .overlay .footer{ display:none !important; visibility:hidden !important; pointer-events:none !important; }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="inner">
+      <a class="logo" href="/" aria-label="Home">HANDBAGS</a>
+      <button class="search-btn" aria-label="Open search">
+        <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001l3.85 3.85a1 1 0 0 0 1.415-1.415l-3.867-3.833zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"/></svg>
+      </button>
+    </div>
+  </header>
+
+  <main>
+    <section class="grid" id="grid" aria-live="polite"></section>
+  </main>
+
+  <!-- Viewer -->
+  <div class="overlay" id="overlay" aria-hidden="true"></div>
+  <div class="sheet" id="viewer" aria-hidden="true" role="dialog" aria-modal="true" aria-label="Item viewer">
+    <div class="body">
+      <div class="frame">
+        <div class="media">
+          <div class="slides" id="slides"></div>
+          <div class="dots" id="dots"></div>
+          <div class="slide-indicator" id="slideIndicator">1 / 1</div>
+        </div>
+      </div>
+      <div class="detail" id="detail">
+        <button id="closeViewer" aria-label="Close" style="border:1px solid #2a2a2a;background:transparent;color:#e6e6e6;border-radius:8px;padding:6px 10px;float:right">Close</button>
+        <h2 id="dTitle"></h2>
+        <div class="line" id="dMeta"></div>
+        <div class="line" id="dPrice"></div>
+        <p id="dDesc"></p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Request quote (viewer-only floating) -->
+  <a id="wa-quote" href="https://wa.me/?text=Hi%2C%20I%27d%20like%20a%20quote%20for%20this%20item" target="_blank" rel="noopener" aria-label="Request quote on WhatsApp">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 2a10 10 0 0 0-8.94 14.5L2 22l5.67-1.47A10 10 0 1 0 12 2zm0 18a8 8 0 0 1-4.06-1.1l-.28-.16-3.03.78.82-2.94-.17-.27A8 8 0 1 1 12 20zm4.18-6.36c-.2-.12-1.23-.72-1.42-.8-.19-.08-.33-.12-.46.12-.13.24-.53.87-.65 1.05-.12.18-.24.2-.45.1-.2-.1-.86-.32-1.63-.98-.6-.52-1-1.14-1.12-1.32-.12-.18-.01-.29.1-.41.1-.11.23-.29.34-.43.11-.14.15-.24.22-.4.07-.16.03-.29-.02-.41-.05-.12-.47-1.2-.64-1.65-.17-.45-.36-.39-.5-.4l-.44-.01c-.15 0-.39.05-.59.27-.2.22-.78.76-.78 1.86s.79 2.16.9 2.31c.11.14 1.55 2.38 3.77 3.36.53.23.95.37 1.27.47.53.17 1 .14 1.37.09.42-.06 1.37-.56 1.56-1.08.2-.52.2-.97.13-1.08-.06-.11-.21-.17-.46-.29z"/></svg>
+    <span>Request quote</span>
+  </a>
+
+  <!-- Search overlay -->
+  <div id="search-overlay" aria-hidden="true">
+    <div class="search-panel" role="dialog" aria-modal="true" aria-label="Search">
+      <div class="search-head">
+        <input id="global-search-input" class="search-input" type="search" placeholder="Search brand, color, material…" autocomplete="off" />
+        <button class="search-clear" id="search-clear-btn" aria-label="Clear search">Clear</button>
+      </div>
+      <div><a class="search-style-link" id="search-style-link" href="https://wa.me/?text=I%20want%20to%20request%20a%20specific%20style" target="_blank" rel="noopener" aria-label="Style request via WhatsApp">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2a10 10 0 0 0-8.94 14.5L2 22l5.67-1.47A10 10 0 1 0 12 2zm0 18a 8 8 0 0 1-4.06-1.1l-.28-.16-3.03.78.82-2.94-.17-.27A8 8 0 1 1 12 20zm4.18-6.36c-.2-.12-1.23-.72-1.42-.8-.19-.08-.33-.12-.46.12-.13.24-.53.87-.65 1.05-.12.18-.24.2-.45.1-.2-.1-.86-.32-1.63-.98-.6-.52-1-1.14-1.12-1.32-.12-.18-.01-.29.1-.41.1-.11.23-.29.34-.43.11-.14.15-.24.22-.4.07-.16.03-.29-.02-.41-.05-.12-.47-1.2-.64-1.65-.17-.45-.36-.39-.5-.4l-.44-.01c-.15 0-.39.05-.59.27-.2.22-.78.76-.78 1.86s.79 2.16.9 2.31c.11.14 1.55 2.38 3.77 3.36.53.23.95.37 1.27.47.53.17 1 .14 1.37.09.42-.06 1.37-.56 1.56-1.08.2-.52.2-.97.13-1.08-.06-.11-.21-.17-.46-.29z"/></svg>
+        <span>Style request</span></a>
+      </div>
+      <div class="search-subbar"><div class="search-meta" id="search-meta">Showing all items</div></div>
+      <div class="search-list" id="search-list"></div>
+      <div id="search-results-hint" style="display:none;"></div>
+      <button id="search-close-btn" aria-label="Close search" style="position:absolute;top:8px;right:8px;border:1px solid #2a2a2a;background:transparent;color:#e6e6e6;border-radius:8px;padding:6px 10px">Close</button>
+    </div>
+  </div>
+
+  <script>
+  // Dynamically size header padding
+  (function(){
+    function syncHeaderHeight(){
+      const h = document.querySelector('header'); if (!h) return;
+      const px = h.getBoundingClientRect().height || 64;
+      document.documentElement.style.setProperty('--header-h', Math.round(px) + 'px');
+    }
+    window.addEventListener('load', syncHeaderHeight);
+    window.addEventListener('resize', ()=> requestAnimationFrame(syncHeaderHeight));
+    setTimeout(syncHeaderHeight, 50);
+  })();
+  </script>
+
+  <script>
+  // Load products from /data/items.json (Decap CMS writes here)
+  (function(){
+    async function loadProducts(){
+      try{
+        const res = await fetch('/data/items.json', {cache:'no-store'});
+        const data = await res.json();
+        if (data && data.products){
+          window.DATA = data.products;
+          buildGrid(window.DATA);
+        }
+      }catch(e){ console.warn('Failed to load items.json', e); }
+    }
+    if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', loadProducts);
+    else loadProducts();
+  })();
+  </script>
+
+  <script>
+  // Build feed grid from DATA
+  (function(){
+    const grid = document.getElementById('grid');
+    function el(tag, cls){ const n=document.createElement(tag); if(cls) n.className=cls; return n; }
+
+    function createCard(item){
+      const a = el('article','card');
+      a.dataset.slug = item.slug || '';
+      a.dataset.brand = item.brand || '';
+      a.dataset.category = item.category || '';
+      a.dataset.color = item.color || '';
+      a.dataset.material = item.material || '';
+      a.dataset.price = item.price != null ? String(item.price) : '';
+      a.dataset.tags = (item.tags||[]).join(',');
+
+      const media = el('div','media');
+      const img = new Image();
+      img.decoding='async'; img.loading='lazy';
+      img.src = (item.images && item.images[0] && item.images[0].url) ? item.images[0].url : '';
+      img.alt = (item.images && item.images[0] && item.images[0].alt) ? item.images[0].alt : (item.title||'Image');
+      img.onerror = ()=>{ img.onerror=null; img.src='data:image/svg+xml;utf8,'+encodeURIComponent('<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 400 500\"><rect width=\"400\" height=\"500\" fill=\"#111\"/><text x=\"200\" y=\"260\" text-anchor=\"middle\" fill=\"#666\" font-family=\"system-ui\" font-size=\"24\">Image</text></svg>'); };
+      media.appendChild(img);
+
+      // NEW badge
+      const hasNew = (a.dataset.tags||'').toLowerCase().includes('new');
+      if (hasNew){ const b=el('span','badge-new'); b.textContent='NEW'; media.appendChild(b); }
+
+      a.appendChild(media);
+
+      const meta = el('div','meta');
+      const stack = el('div','stack');
+      const t = el('div','title'); t.textContent = item.title || 'Item';
+      const s = el('div','sub'); s.textContent = [item.brand,item.category,item.color,item.material].filter(Boolean).join(' • ');
+      stack.appendChild(t); stack.appendChild(s);
+      const p = el('div','price'); p.textContent = item.price!=null ? ('$'+item.price) : '';
+      meta.appendChild(stack); meta.appendChild(p);
+      a.appendChild(meta);
+
+      a.addEventListener('click', ()=> openViewer(item));
+      return a;
+    }
+
+    window.buildGrid = function(items){
+      grid.innerHTML='';
+      (items||[]).forEach(it=> grid.appendChild(createCard(it)));
+    };
+
+    // Viewer
+    const overlay = document.getElementById('overlay');
+    const viewer = document.getElementById('viewer');
+    const slides = document.getElementById('slides');
+    const dots = document.getElementById('dots');
+    const indicator = document.getElementById('slideIndicator');
+
+    const dTitle = document.getElementById('dTitle');
+    const dMeta = document.getElementById('dMeta');
+    const dPrice = document.getElementById('dPrice');
+    const dDesc = document.getElementById('dDesc');
+    const closeViewer = document.getElementById('closeViewer');
+
+    function nearestIndex(sc){ const w=sc.clientWidth||1; return Math.round((sc.scrollLeft||0)/w); }
+    function updateIndicator(sc){
+      const n = sc.children.length || 1;
+      const i = Math.max(0, Math.min(nearestIndex(sc), n-1));
+      indicator.textContent = (i+1)+' / '+n;
+      const ds = dots.querySelectorAll('.dot');
+      ds.forEach((d,di)=> d.classList.toggle('is-active', di===i));
+      ds.forEach((d,di)=> d.setAttribute('aria-current', di===i ? 'true':'false'));
+    }
+
+    function openViewer(item){
+      // Build slides
+      slides.innerHTML=''; dots.innerHTML='';
+      const mediaList = (item.images||[]);
+      mediaList.forEach((m,idx)=>{
+        const wrap = el('div','slide');
+        const im = new Image(); im.decoding='async'; im.loading='eager'; im.src = m.url || ''; im.alt = m.alt || (item.title||'Image');
+        im.onerror = ()=>{ im.onerror=null; im.src='data:image/svg+xml;utf8,'+encodeURIComponent('<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 400 500\"><rect width=\"400\" height=\"500\" fill=\"#111\"/><text x=\"200\" y=\"260\" text-anchor=\"middle\" fill=\"#666\" font-family=\"system-ui\" font-size=\"24\">Image</text></svg>'); };
+        wrap.appendChild(im); slides.appendChild(wrap);
+        const d = el('div','dot'); d.setAttribute('role','button'); d.setAttribute('aria-label','Go to slide '+(idx+1)); dots.appendChild(d);
+        d.addEventListener('click', ()=> slides.scrollTo({left: idx*(slides.clientWidth||1), behavior:'smooth'}));
+      });
+      if (mediaList.length===0){ const wrap=el('div','slide'); const im=new Image(); im.src='data:image/svg+xml;utf8,'+encodeURIComponent('<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 400 500\"><rect width=\"400\" height=\"500\" fill=\"#111\"/></svg>'); wrap.appendChild(im); slides.appendChild(wrap); }
+
+      dTitle.textContent = item.title || 'Item';
+      dMeta.textContent = [item.brand,item.category,item.color,item.material].filter(Boolean).join(' • ');
+      dPrice.textContent = item.price!=null ? ('$'+item.price) : '';
+      dDesc.textContent = item.description || '';
+
+      overlay.classList.add('open'); overlay.setAttribute('aria-hidden','false');
+      viewer.classList.add('open'); viewer.setAttribute('aria-hidden','false');
+      document.documentElement.classList.add('viewer-open');
+
+      updateIndicator(slides);
+    }
+
+    function close(){
+      overlay.classList.remove('open'); overlay.setAttribute('aria-hidden','true');
+      viewer.classList.remove('open'); viewer.setAttribute('aria-hidden','true');
+      document.documentElement.classList.remove('viewer-open');
+    }
+
+    overlay.addEventListener('click', close);
+    closeViewer.addEventListener('click', close);
+    window.addEventListener('keydown', (e)=>{ if (e.key==='Escape') close(); });
+
+    // Swipe fallback for iOS
+    (function(){
+      const SEL = '.slides';
+      function install(sc){
+        if (!sc || sc.__iosSwipe) return;
+        sc.__iosSwipe = true;
+        let sx=0,lx=0,st=0;
+        sc.addEventListener('touchstart', e=>{ const t=e.changedTouches[0]; sx=lx=t.clientX; st=Date.now(); }, {passive:true});
+        sc.addEventListener('touchmove', e=>{ lx=e.changedTouches[0].clientX; }, {passive:true});
+        sc.addEventListener('touchend', ()=>{
+          const dx = lx - sx, dt = Math.max(1, Date.now()-st), w = sc.clientWidth||1;
+          const fast = Math.abs(dx)/dt > .6, thr = Math.min(.22*w, 160);
+          let dir = 0;
+          if (dx < -thr || (dx < -24 && fast)) dir = 1;
+          if (dx >  thr || (dx >  24 && fast)) dir = -1;
+          if (dir){
+            const idx = Math.round((sc.scrollLeft||0)/w);
+            const target = Math.max(0, Math.min(idx+dir, Math.ceil((sc.scrollWidth-w)/w)));
+            sc.scrollTo({left: target*w, behavior:'smooth'});
+          }
+        }, {passive:true});
+        sc.addEventListener('scroll', ()=> updateIndicator(sc), {passive:true});
+        window.addEventListener('resize', ()=> updateIndicator(sc), {passive:true});
+      }
+      const mo = new MutationObserver(()=>{
+        document.querySelectorAll(SEL).forEach(install);
+      });
+      mo.observe(document.body, {subtree:true, childList:true});
+    })();
+
+    // Expose createCard for potential re-renders
+    window.createCard = createCard;
+  })();
+  </script>
+
+  <script>
+  // Search overlay: ranking, highlighting, keyboard nav, focus trap
+  (function(){
+    const overlay = document.getElementById('search-overlay');
+    const openBtn = document.querySelector('.search-btn');
+    const input = document.getElementById('global-search-input');
+    const closeBtn = document.getElementById('search-close-btn');
+    const clearBtn = document.getElementById('search-clear-btn');
+    const list = document.getElementById('search-list');
+    const metaLine = document.getElementById('search-meta');
+    let _cards = []; let activeIndex = -1; let lastFocus=null;
+
+    function refreshCards(){ _cards = Array.from(document.querySelectorAll('.card')); }
+    const mo = new MutationObserver(refreshCards);
+    mo.observe(document.body, {childList:true, subtree:true});
+
+    function words(q){ return (q||'').toLowerCase().trim().split(/\s+/).filter(Boolean); }
+    function scoreCard(card, terms){
+      if (!terms.length) return 1;
+      const ds = card.dataset || {};
+      const fields = {
+        brand:(ds.brand||'').toLowerCase(),
+        category:(ds.category||'').toLowerCase(),
+        color:(ds.color||'').toLowerCase(),
+        material:(ds.material||'').toLowerCase(),
+        tags:(ds.tags||'').toLowerCase(),
+        text:(card.innerText||'').toLowerCase()
+      };
+      let score=0; const w={brand:5,category:4,color:3,material:3,tags:2,text:1};
+      terms.forEach(t=>{ for(const k in fields){ if(fields[k].includes(t)) score+=w[k]; } });
+      return score;
+    }
+    function highlight(text, terms){
+      if (!terms.length || !text) return text;
+      let out = text;
+      terms.forEach(t=>{
+        const re = new RegExp('('+t.replace(/[.*+?^${}()|[\\]\\\\]/g,'\\$&')+')','ig');
+        out = out.replace(re,'<mark class="hl">$1</mark>');
+      });
+      return out;
+    }
+
+    function emptyState(){
+      list.innerHTML='';
+      const wrap = document.createElement('div');
+      wrap.className='search-empty';
+      wrap.innerHTML = '<div>No matches.</div>';
+      const sugs = document.createElement('div'); sugs.className='sugs';
+      ['black tote','nylon','mini bag','ivory','suede','crossbody'].forEach(txt=>{
+        const a=document.createElement('a'); a.href='#'; a.innerHTML='<svg viewBox="0 0 16 16"><path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001l3.85 3.85a1 1 0 0 0 1.415-1.415l-3.867-3.833zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"/></svg>'+txt;
+        a.addEventListener('click', (e)=>{ e.preventDefault(); input.value=txt; filterGrid(txt); input.focus(); });
+        sugs.appendChild(a);
+      });
+      wrap.appendChild(sugs); list.appendChild(wrap);
+    }
+
+    function cardThumb(c){
+      const img = c.querySelector('.media img'); if (img && img.src) return img.src;
+      const poster = c.querySelector('video')?.poster; return poster||'';
+    }
+    function goToCard(c){
+      closeSearch();
+      c.scrollIntoView({behavior:'smooth',block:'center'});
+      c.classList.remove('glow'); setTimeout(()=> c.classList.add('glow'), 60);
+    }
+
+    function renderList(matches, terms){
+      list.innerHTML='';
+      if (!matches.length){ emptyState(); return; }
+      matches.slice(0,60).forEach((c,i)=>{
+        const row = document.createElement('div'); row.className='search-item'; row.setAttribute('role','option'); row.setAttribute('data-index', String(i)); row.tabIndex=-1;
+        const title = c.querySelector('.title')?.textContent || 'Item';
+        const sub = [c.dataset.brand,c.dataset.category,c.dataset.color,c.dataset.material].filter(Boolean).join(' • ');
+        row.innerHTML = '<img class="search-thumb" src="'+cardThumb(c)+'" alt="" />'
+                       + '<div><div class="search-title">'+highlight(title,terms)+'</div><div class="search-sub">'+highlight(sub,terms)+'</div></div>'
+                       + '<div class="search-price">'+(c.dataset.price?('$'+c.dataset.price):'')+'</div>';
+        row.addEventListener('click', ()=> goToCard(c));
+        list.appendChild(row);
+        setTimeout(()=> row.classList.add('show'), 20 + i*20);
+      });
+      activeIndex = matches.length ? 0 : -1; updateActive();
+    }
+    function updateActive(){
+      const items = Array.from(list.querySelectorAll('.search-item'));
+      items.forEach((it,i)=>{
+        const sel = i===activeIndex;
+        it.setAttribute('aria-selected', sel?'true':'false');
+        it.classList.toggle('is-active', sel);
+        if (sel) it.scrollIntoView({block:'nearest'});
+      });
+    }
+
+    function filterGrid(q){
+      const terms = words(q);
+      refreshCards();
+      const scored = [];
+      _cards.forEach(c=>{
+        const s = scoreCard(c, terms);
+        const match = terms.length===0 || s>0;
+        c.classList.toggle('is-filtered-out', !match);
+        if (match) scored.push({c,s});
+      });
+      scored.sort((a,b)=> b.s - a.s);
+      const matches = scored.map(x=>x.c);
+      if (metaLine){
+        metaLine.innerHTML = terms.length ? ('Showing <strong>'+matches.length+'</strong> results for ‘<strong>'+q+'</strong>’') : ('Showing <strong>'+matches.length+'</strong> results');
+      }
+      renderList(matches, terms);
+    }
+
+    function openSearch(e){
+      if (e){ e.preventDefault(); e.stopImmediatePropagation(); }
+      lastFocus = document.activeElement;
+      overlay.classList.add('open'); overlay.setAttribute('aria-hidden','false');
+      setTimeout(()=> input && input.focus(), 30);
+      filterGrid(input ? input.value : '');
+      trapFocus(true);
+    }
+    function closeSearch(e){
+      if (e){ e.preventDefault(); e.stopImmediatePropagation(); }
+      overlay.classList.remove('open'); overlay.setAttribute('aria-hidden','true');
+      trapFocus(false);
+      setTimeout(()=>{ if(lastFocus && lastFocus.focus) lastFocus.focus(); }, 40);
+    }
+    function onKey(e){
+      if (overlay.getAttribute('aria-hidden')==='true') return;
+      const items = Array.from(list.querySelectorAll('.search-item'));
+      if (e.key==='ArrowDown'){ e.preventDefault(); if (items.length){ activeIndex=Math.min(items.length-1, activeIndex+1); updateActive(); } }
+      else if (e.key==='ArrowUp'){ e.preventDefault(); if (items.length){ activeIndex=Math.max(0, activeIndex-1); updateActive(); } }
+      else if (e.key==='Enter'){ if (items.length && activeIndex>=0){ items[activeIndex].click(); } }
+      else if (e.key==='Escape'){ closeSearch(e); }
+    }
+    function trapFocus(enable){
+      const panel = overlay.querySelector('.search-panel'); if (!panel) return;
+      if (!enable){ overlay.onkeydown=null; return; }
+      overlay.onkeydown = (e)=>{
+        if (e.key!=='Tab') return;
+        const nodes = panel.querySelectorAll('button, [href], input, select, [tabindex]:not([tabindex="-1"])');
+        if (!nodes.length) return;
+        const first = nodes[0], last = nodes[nodes.length-1];
+        if (e.shiftKey && document.activeElement===first){ e.preventDefault(); last.focus(); }
+        else if (!e.shiftKey && document.activeElement===last){ e.preventDefault(); first.focus(); }
+      };
+    }
+
+    document.querySelector('.search-btn')?.addEventListener('click', openSearch, true);
+    document.getElementById('search-close-btn')?.addEventListener('click', closeSearch, true);
+    window.addEventListener('keydown', (e)=>{ if (e.key==='/' && !e.metaKey && !e.ctrlKey && !e.altKey) openSearch(e); }, true);
+    window.addEventListener('keydown', onKey, true);
+    input?.addEventListener('input', (e)=> filterGrid(e.target.value));
+    clearBtn?.addEventListener('click', (e)=>{ e.preventDefault(); input&&(input.value=''); filterGrid(''); closeSearch(); });
+  })();
+  </script>
+</body>
+</html>
