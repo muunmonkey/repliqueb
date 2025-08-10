@@ -1,558 +1,2581 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Handbags — IG Style</title>
-  <meta name="color-scheme" content="dark only">
-  <style>
-    :root{ --header-h:64px; --gap:10px; --accent:#F4E38A }
-    *{ box-sizing:border-box }
-    html,body{ height:100% }
-    body{ margin:0; background:#0b0b0b; color:#e6e6e6; font:14px/1.45 system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial }
-    a{ color:inherit }
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=1">
+<title>Catalog • Grid</title>
+<meta name="color-scheme" content="dark light">
+<style>
+/* Fonts */
+:root{ --ff-sans: "PP Neue Montreal Variable","PP Neue Montreal","Inter","Manrope","Sora","system-ui",-apple-system,"Helvetica Neue",Arial,sans-serif; }
+@font-face{ font-family:"PP Neue Montreal Variable"; src:url("PPNeueMontreal-Variable.woff2") format("woff2-variations"); font-weight:100 900; font-style:normal; font-display:swap; }
+@font-face{ font-family:"PP Neue Montreal"; src:url("PPNeueMontreal-Regular.woff2") format("woff2"); font-weight:400; font-style:normal; font-display:swap; }
+@font-face{ font-family:"PP Neue Montreal"; src:url("PPNeueMontreal-Bold.woff2") format("woff2"); font-weight:700; font-style:normal; font-display:swap; }
 
-    /* Fixed header: logo left, search icon right */
-    header{
-      position:fixed; top:0; left:0; right:0; z-index:3000;
-      display:flex; align-items:center; justify-content:center;
-      height:var(--header-h); background:transparent;
-      padding:0 14px;
-    }
-    header .inner{ position:relative; width:100%; max-width:1200px; display:flex; align-items:center; justify-content:center; }
-    .logo{
-      position:absolute; left:14px; top:50%; transform:translateY(-50%);
-      font-weight:800; font-size:18px; letter-spacing:.18em; text-transform:uppercase;
-      text-decoration:none;
-    }
-    .logo:hover{ opacity:.9 }
-    .actions{ position:absolute; right:14px; top:50%; transform:translateY(-50%); display:flex; gap:8px; }
-    .search-btn{ border:0; background:transparent; padding:8px; cursor:pointer }
-    .search-btn svg{ width:22px; height:22px; display:block; fill:#e6e6e6 }
+/* Theme */
+:root{
+  --bg:#0b0b0b; --card:#111; --fg:#fff; --muted:#b8b8b8; --border:#222;
+  --pill:#000; --pillText:#fff; --tap:44px; --accent:#fff;
+}
+@media (prefers-color-scheme: light){
+  :root{ --bg:#FAF8F6; --card:#fff; --fg:#111; --muted:#6b6b6b; --border:#e7e4e0; --pill:#000; --pillText:#fff; --accent:#111; }
+}
+*{box-sizing:border-box} html,body{height:100%} body{margin:0;font:16px/1.45 var(--ff-sans);background:var(--bg);color:var(--fg);}
 
-    body{ padding-top:var(--header-h) }
+/* Header */
+header{position:sticky;top:0;z-index:20;background:var(--bg);border-bottom:1px solid var(--border);padding:10px 12px 8px;display:grid;gap:8px;justify-items:center}
+.brand{display:flex;align-items:center;justify-content:center}
+.logo{height:28px;display:block}
+.controls{display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:8px;width:100%;max-width:1100px}
+@media(min-width:980px){ .controls{grid-template-columns:minmax(260px,1fr) 200px 200px 200px 200px} }
+.input,.select{
+  height:44px;width:100%;
+  border:1px solid var(--border); border-radius:12px;
+  background: linear-gradient(to bottom, rgba(255,255,255,.02), rgba(0,0,0,.05)), var(--card);
+  color:var(--fg); padding:0 14px 0 40px;
+  font-size:16px; font-family:var(--ff-sans);
+  -webkit-appearance:none; appearance:none;
+  transition:border-color .15s ease, box-shadow .15s ease, background .15s ease;
+  outline:none;
+}
+.input::placeholder{ color:var(--muted); opacity:.9; }
+.input:hover,.select:hover{ border-color: rgba(255,255,255,.25); }
+.input:focus,.select:focus{ border-color:#8b8b8b; box-shadow:0 0 0 4px rgba(255,255,255,.07); }
+@media (prefers-color-scheme: light){
+  .input:hover,.select:hover{ border-color: rgba(0,0,0,.25); }
+  .input:focus,.select:focus{ border-color:#222; box-shadow:0 0 0 4px rgba(0,0,0,.07); }
+}
+#q{
+  background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='18' height='18' viewBox='0 0 24 24' fill='none' stroke='%23b8b8b8' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><circle cx='11' cy='11' r='7'/><line x1='21' y1='21' x2='16.65' y2='16.65'/></svg>");
+  background-repeat:no-repeat;background-position:12px center;
+}
+.select{padding-left:14px;padding-right:40px;background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='18' height='18' viewBox='0 0 24 24' fill='none' stroke='%23b8b8b8' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><polyline points='6 9 12 15 18 9'/></svg>");background-repeat:no-repeat;background-position:right 12px center}
+.select::-ms-expand{display:none}
+.filters-mobile{display:grid;gap:6px;padding:0 12px 6px}
+@media(min-width:760px){.filters-mobile{display:none}}
+.chips{display:flex;gap:8px;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none}
+.chips::-webkit-scrollbar{display:none}
+.chip{padding:8px 10px;border:1px solid var(--border);border-radius:999px;background:var(--card);color:var(--fg);white-space:nowrap;transition:border-color .15s ease, background .15s ease}
+.chip.active{outline:2px solid var(--accent);outline-offset:2px}
 
-    /* Grid feed */
-    .grid{
-      width:100%; max-width:1200px; margin:0 auto; padding:10px;
-      display:grid; grid-template-columns:repeat(2, 1fr); gap:var(--gap);
-    }
-    @media (min-width:700px){ .grid{ grid-template-columns:repeat(3, 1fr) } }
-    @media (min-width:1100px){ .grid{ grid-template-columns:repeat(5, 1fr) } }
+/* Grid */
+.grid{padding:12px;display:grid;gap:12px;grid-template-columns:repeat(2,1fr)}
+@media(min-width:700px){.grid{grid-template-columns:repeat(3,1fr)}}
+@media(min-width:1100px){.grid{grid-template-columns:repeat(4,1fr)}}
+.card{background:var(--card);border:1px solid var(--border);border-radius:14px;overflow:hidden;cursor:pointer;transition:transform .18s ease,box-shadow .18s ease}
+.card:hover{transform:translateY(-1px);box-shadow:0 6px 20px rgba(0,0,0,.15)}
+.media{width:100%;aspect-ratio:4/5;background:#141414;position:relative;overflow:hidden}
+.media img,.media video{width:100%;height:100%;object-fit:cover;display:block}
+.badge{position:absolute;top:10px;left:10px;background:var(--pill);color:var(--pillText);border:1px solid rgba(255,255,255,.25);border-radius:999px;font-size:11px;padding:4px 8px}
+.meta{padding:10px 10px 12px;display:grid;gap:4px;position:relative}
+.title{font-weight:600;font-size:14px;letter-spacing:-.01em}
+.sub{color:var(--muted);font-size:12px}
+/* Brand monogram */
+.brandmark{position:absolute;left:10px;bottom:10px;display:inline-flex;align-items:center;gap:8px}
+.brandmark .bm{width:18px;height:18px;border-radius:4px;border:1px solid var(--border);display:grid;place-items:center;font-size:10px;font-weight:700;background:#111;color:#fff}
 
-    article.card{
-      background:#111; border-radius:12px; overflow:hidden;
-      display:flex; flex-direction:column; gap:8px;
-    }
-    .card .media{ position:relative; aspect-ratio:4/5; background:#000; isolation:isolate; }
-    .card .media img, .card .media video{ width:100%; height:100%; object-fit:cover; display:block; }
+/* Overlay */
+.overlay{position:fixed;inset:0;display:none;background:rgba(0,0,0,.5);z-index:50}
+.overlay.open{display:grid;place-items:center}
+.sheet{width:100%;max-width:1100px;height:100vh;background:var(--card);border:1px solid var(--border);border-radius:16px;display:grid;grid-template-rows:auto 1fr auto;overflow:hidden}
+.topbar{display:flex;align-items:center;justify-content:space-between;padding:10px;gap:8px}
+.btn{display:inline-flex;align-items:center;justify-content:center;min-width:var(--tap);height:var(--tap);border-radius:10px;border:1px solid var(--border);background:var(--card);color:var(--fg);cursor:pointer;letter-spacing:-.005em;font-weight:600}
+.btn.icon{width:var(--tap);padding:0}
+.body{display:grid;grid-template-columns:1fr;gap:12px;padding:8px 10px 0;overflow:auto}
+@media(min-width:980px){.body{grid-template-columns:58% 42%}}
+.frame{position:relative;width:100%;aspect-ratio:4/5;background:#141414;border:1px solid var(--border);border-radius:12px;overflow:hidden}
+.slides{display:flex;height:100%;transition:transform .25s ease}
+.slide{width:100%;height:100%;flex:0 0 100%;display:grid;place-items:center;background:#000}
+.slide img,.slide video{max-width:100%;max-height:100%;object-fit:contain;display:block}
+.dots{position:absolute;left:0;right:0;bottom:8px;display:flex;justify-content:center;gap:8px}
+.dot{width:6px;height:6px;border-radius:999px;background:rgba(255,255,255,.35);border:1px solid rgba(0,0,0,.4)}
+.dot.active{background:#fff}
+.arrow{position:absolute;top:50%;transform:translateY(-50%);width:var(--tap);height:var(--tap);display:grid;place-items:center;background:rgba(0,0,0,.45);border:1px solid rgba(255,255,255,.15);border-radius:999px}
+.arrow.left{left:8px} .arrow.right{right:8px}
+.caption{color:var(--muted);font-size:12px;text-align:center;padding:8px}
+.h1{font-weight:700;font-size:18px}
+.kv{display:flex;flex-wrap:wrap;gap:8px;margin:8px 0}
+.kv .pill{border:1px solid var(--border);background:var(--card);border-radius:999px;padding:6px 10px;font-size:12px;color:var(--muted)}
+.desc{color:var(--muted);font-size:14px;line-height:1.5}
+.specs{display:grid;gap:8px;margin:8px 0 12px;padding:0;list-style:none}
+.specs li{display:flex;align-items:center;gap:12px;color:var(--fg)}
+.spec-icon{width:16px;height:16px;opacity:.9}
+.btn-black{background:#000;color:#fff;border-color:#000;padding:10px 14px;font-weight:600}
+.footer{padding:10px;display:flex;justify-content:center;border-top:1px solid var(--border)}
+.wa-cta{display:inline-flex;align-items:center;gap:10px;padding:12px 16px;border-radius:999px;background:#25D366;color:#04210f;font-weight:600;text-decoration:none;border:none;box-shadow:0 8px 24px rgba(0,0,0,.15)}
+.wa-cta svg{width:18px;height:18px}
 
-    .badge-new{
-      position:absolute; left:8px; top:8px; z-index:5; padding:6px 10px; border-radius:999px;
-      font:700 11px/1 system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial;
-      letter-spacing:.06em; text-transform:uppercase; pointer-events:none;
-      color:#fff; background:transparent; mix-blend-mode:difference; border:1px solid rgba(255,255,255,.85);
-    }
-    @supports not (mix-blend-mode:difference){
-      .badge-new{ background:rgba(0,0,0,.55); color:#fff; border-color:rgba(255,255,255,.25) }
-    }
+/* === Instagram-style feed overrides === */
+header{border-bottom:none;background:transparent}
+.controls,.filters-mobile{display:none!important}
 
-    .meta{
-      display:flex; justify-content:space-between; align-items:center; gap:10px;
-      padding:0 4px 10px 4px;
-    }
-    .title{ font-weight:650; font-size:13px; line-height:1.2; }
-    .sub{ opacity:.8; font-size:12px; margin-top:2px }
-    .stack{ display:flex; flex-direction:column }
+.grid{padding:2px!important;gap:2px!important}
+@media(min-width:700px){.grid{grid-template-columns:repeat(3,1fr)}}
+@media(min-width:1100px){.grid{grid-template-columns:repeat(4,1fr)}}
 
-    /* Viewer overlay */
-    .overlay{ position:fixed; inset:0; background:rgba(0,0,0,.8); display:none; z-index:4000 }
-    .overlay.open{ display:block }
-    .sheet{
-      position:fixed; inset:0; display:none; z-index:4010;
-      background:#0b0b0b;
-    }
-    .sheet.open{ display:block }
-    .sheet .body{
-      height:100%; display:grid; grid-template-columns:1fr; align-items:start;
-    }
-    @media (min-width:1024px){
-      .sheet .body{
-        grid-template-columns:minmax(520px,58%) minmax(360px,42%);
-      }
-    }
-    .frame{ position:relative; background:#000; height:100%; }
-    .frame .media{ position:relative; aspect-ratio:4/5; height:100%; }
-    @media (min-width:1024px){
-      .frame{ position:sticky; top:0; height:100vh; }
-      .frame .media{ height:100%; }
-    }
-    .slides{
-      display:flex; overflow-x:auto; scroll-snap-type:x mandatory; -webkit-overflow-scrolling:touch;
-      touch-action:pan-x; gap:0; width:100%; height:100%;
-    }
-    .slides > *{ flex:0 0 100%; width:100%; height:100%; scroll-snap-align:center }
-    .slides img, .slides video{ width:100%; height:100%; object-fit:contain; background:#000 }
-    .dots{ position:absolute; left:50%; transform:translateX(-50%); bottom:10px; display:flex; gap:6px; z-index:6 }
-    .dot{ width:6px; height:6px; border-radius:999px; background:#cfcfcf; opacity:.5 }
-    .dot.is-active{ opacity:1; transform:scale(1.2) }
-    .slide-indicator{
-      position:absolute; right:10px; top:10px; z-index:6;
-      padding:6px 8px; border-radius:999px; font:600 12px/1 system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial;
-      color:#fff; background:rgba(0,0,0,.35); backdrop-filter:saturate(1.2) blur(2px);
-    }
-    @supports (mix-blend-mode:difference){
-      .slide-indicator{ mix-blend-mode:difference; background:transparent; border:1px solid rgba(255,255,255,.75) }
-    }
+.card{position:relative;background:transparent!important;border:none!important;border-radius:0!important;box-shadow:none!important;transition:none!important;overflow:hidden}
+.card:hover{transform:none!important;box-shadow:none!important}
 
-    .detail{
-      padding:16px; overflow:auto; max-height:100vh;
-    }
-    .detail h2{ margin:0 0 6px 0; font-size:18px }
-    .detail .line{ opacity:.85; margin-bottom:8px }
+.media{aspect-ratio:1/1!important;background:#000!important;border:none!important;border-radius:0!important}
+.media img,.media video{object-fit:cover!important}
 
-    /* Request quote button: viewer only */
-    #wa-quote{
-      position:fixed; left:50%; transform:translateX(-50%);
-      bottom:calc(env(safe-area-inset-bottom,0) + 14px);
-      z-index:5200; display:none; align-items:center; gap:10px;
-      padding:12px 16px; border-radius:999px; background:#25D366; color:#0c0c0c;
-      font:600 14px/1 system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial; text-decoration:none;
-      box-shadow:0 10px 26px rgba(0,0,0,.35);
-    }
-    #wa-quote svg{ width:18px; height:18px; display:block; fill:#0c0c0c }
-    html.viewer-open #wa-quote{ display:flex }
+/* Remove brand monogram badges like LV, G, etc. */
+.brandmark{display:none!important}
 
-    /* Search overlay */
-    #search-overlay{ position:fixed; inset:0; z-index:4300; display:none; background:rgba(0,0,0,.6) }
-    #search-overlay.open{ display:block }
-    #search-overlay .search-panel{
-      position:absolute; left:50%; top:50%; transform:translate(-50%,-50%);
-      width:min(840px,78vw); max-height:80vh; overflow:auto; background:#111; border-radius:12px;
-      padding:16px;
-    }
-    .search-head{ display:flex; align-items:center; gap:10px }
-    .search-input{ flex:1 1 auto; min-height:44px; padding:10px 12px; border-radius:8px; border:1px solid #2a2a2a; background:#0b0b0b; color:#e6e6e6 }
-    .search-clear{ background:transparent; border:1px solid #2a2a2a; color:#d9d9d9; border-radius:8px; padding:8px 10px; cursor:pointer }
-    .search-style-link{ margin-top:6px; display:inline-flex; align-items:center; gap:6px; color:var(--accent); text-decoration:none; font-weight:600; opacity:.95 }
-    .search-style-link svg{ width:14px; height:14px; fill:currentColor; display:block }
-    .search-subbar{
-      position:sticky; top:0; z-index:2; display:flex; align-items:center; justify-content:space-between; gap:8px;
-      padding:8px 0; margin-top:8px; border-bottom:1px solid rgba(255,255,255,.08);
-      background:rgba(0,0,0,.15); backdrop-filter:saturate(1.2) blur(2px);
-    }
-    .search-list{ margin-top:8px }
-    .search-item{
-      display:grid; grid-template-columns:68px 1fr auto; align-items:center; gap:12px;
-      padding:10px 6px; border-radius:10px; opacity:0; transform:translateY(4px); transition:opacity .16s ease, transform .16s ease;
-    }
-    .search-item.show{ opacity:1; transform:translateY(0) }
-    .search-item:hover{ background:rgba(255,255,255,.04) }
-    .search-thumb{ width:68px; height:68px; border-radius:8px; object-fit:cover }
-    .search-title{ font-weight:650 }
-    .search-sub{ opacity:.8; font-size:.95em; margin-top:2px }
-    .search-price{ opacity:.9; font-weight:650; margin-left:8px }
-    mark.hl{ background:transparent; color:#ffd54a; font-weight:700 }
+/* Put all visible text over the image in difference mode */
+.meta{position:absolute;left:0;right:0;bottom:0;padding:10px 10px 12px;background:transparent!important;color:#fff!important;mix-blend-mode:difference;pointer-events:none;display:grid;gap:2px}
+.title{font-weight:700!important;font-size:14px!important;letter-spacing:-.01em}
+.sub{color:#fff!important;opacity:.95}
 
-    @media (max-width:560px){
-      #search-overlay .search-panel{ left:0; top:0; transform:none; width:100vw; height:100vh; border-radius:0; padding:12px }
-      .search-head{ gap:8px }
-      .search-input{ min-height:46px }
-      .search-list{ max-height:calc(100vh - 150px) }
-    }
+/* Badges on top-left as plain text with difference mode */
+.badge{top:8px;left:8px;border:none!important;background:transparent!important;color:#fff!important;font-weight:700;mix-blend-mode:difference;padding:0}
 
-    /* Accessibility: focus styles */
-    :focus-visible{ outline:2px solid #7aa2ff; outline-offset:2px }
+/* Quick view viewer: keep clean, focus on media */
+.sheet{border-radius:0!important;max-width:100%!important}
+.body{grid-template-columns:1fr!important}
+@media(min-width:980px){.body{grid-template-columns:58% 42%!important}} /* still OK on wide screens */
+.frame{border:none!important;border-radius:0!important}
+/* Optional: make the viewer caption float over the media in difference mode */
+.caption{position:absolute;left:10px;bottom:10px;z-index:2;color:#fff!important;mix-blend-mode:difference;background:transparent!important}
+/* Ensure dots/arrows sit above */
+.dots,.arrow{z-index:2}
 
-    /* Hide any old viewer footer if it exists */
-    .sheet .footer, .overlay .footer{ display:none !important; visibility:hidden !important; pointer-events:none !important; }
-  </style>
+
+/* === Quick-view behavior: stack content below image, no blend modes === */
+.sheet .body{
+  display:grid!important;
+  grid-template-columns:1fr!important;
+  align-items:start!important;
+  gap:0!important;
+}
+.sheet .frame{
+  width:100%!important;
+}
+.sheet .meta{
+  position:static!important;
+  padding:16px 16px 24px!important;
+  background:transparent!important;
+  color:inherit!important;
+  mix-blend-mode:normal!important;
+  pointer-events:auto!important;
+}
+/* Ensure any captions/badges in the viewer are not overlaid nor blended */
+.sheet .caption,
+.sheet .badge{
+  position:static!important;
+  background:transparent!important;
+  color:inherit!important;
+  mix-blend-mode:normal!important;
+  margin:0 16px 8px!important;
+}
+/* Safety net: disable blend modes inside the quick-view entirely */
+.sheet *{ mix-blend-mode:normal!important; }
+
+
+/* === Global Dark Theme === */
+html,body{background:#000!important;color:#e6e6e6!important}
+a{color:#cfcfcf}
+hr{border-color:#222}
+/* Make header sticky and dark */
+header{position:sticky;top:0;z-index:1000;background:rgba(0,0,0,.7)!important;backdrop-filter:saturate(140%) blur(6px);}
+/* Logo sizing & shrink on scroll */
+:root{--logo-max:48px;--logo-min:26px}
+header .logo, header .site-logo, header img.logo, header .brand img{
+  height:var(--logo-max);max-height:var(--logo-max);
+  transition:height .25s ease, transform .25s ease;
+}
+header.scrolled .logo, header.scrolled .site-logo, header.scrolled img.logo, header.scrolled .brand img{
+  height:var(--logo-min);max-height:var(--logo-min);
+}
+/* Right-corner search icon */
+header{position:sticky}
+header .actions{position:absolute;right:12px;top:50%;transform:translateY(-50%);display:flex;gap:10px;align-items:center}
+.search-btn{appearance:none;background:transparent;border:none;cursor:pointer;padding:6px;line-height:0;border-radius:999px}
+.search-btn:hover{background:rgba(255,255,255,.06)}
+.search-btn svg{width:22px;height:22px;display:block}
+/* Ensure grid/cards look good on dark */
+.card, .media{background:#000!important}
+/* Overlay text stays difference on feed only (already set), inherits light defaults elsewhere */
+
+
+/* === SVG blend + search icon color === */
+/* Make SVGs in over-image overlays use difference (feed only) */
+.card .meta svg,
+.card .badge svg,
+.card svg.overlay {
+  mix-blend-mode:difference!important;
+}
+
+/* Utility, in case markup uses this class anywhere */
+svg.blend-difference { mix-blend-mode:difference!important; }
+
+/* Ensure search icon is white */
+.search-btn { color:#fff!important; }
+.search-btn svg { color:#fff!important; }
+
+
+/* === Smooth Logo Resize, Flags, Search Overlay, and Demo Photos === */
+:root{
+  --logo-size-max:56px;
+  --logo-size-min:24px;
+  --logo-size:var(--logo-size-max);
+}
+/* Make any recognizable logo element use the dynamic size */
+header img.logo,
+header .logo img,
+header .site-logo,
+header .brand img,
+header .brand svg,
+header svg.logo{
+  height:var(--logo-size) !important;
+  max-height:var(--logo-size) !important;
+  transition:height .45s cubic-bezier(.2,.7,.2,1), transform .45s cubic-bezier(.2,.7,.2,1);
+  transform-origin:left center;
+}
+
+/* Tiny top-right flags for media type (always white, no blend) */
+.flag{
+  position:absolute;
+  top:8px; right:8px;
+  width:18px; height:18px;
+  display:inline-flex; align-items:center; justify-content:center;
+  background:rgba(0,0,0,.45);
+  border-radius:5px;
+  padding:2px;
+  mix-blend-mode:normal !important;
+  z-index:3;
+}
+.flag svg{ width:14px; height:14px; color:#fff; fill:#fff; display:block; }
+
+/* Ensure .media can host the flag */
+.media{ position:relative; overflow:hidden; }
+
+/* Search overlay */
+#search-overlay{
+  position:fixed; inset:0;
+  background:rgba(0,0,0,.75);
+  -webkit-backdrop-filter:saturate(140%) blur(10px);
+  backdrop-filter:saturate(140%) blur(10px);
+  display:none;
+  z-index:2000;
+}
+#search-overlay.open{ display:block; }
+.search-panel{
+  position:absolute; left:50%; top:10%;
+  transform:translateX(-50%);
+  width:min(860px, 92vw);
+  background:#0b0b0b; border:1px solid #1e1e1e;
+  border-radius:14px;
+  box-shadow:0 10px 30px rgba(0,0,0,.6);
+  padding:18px;
+}
+.search-head{ display:flex; align-items:center; gap:10px; }
+.search-input{
+  flex:1; background:#111; color:#f6f6f6;
+  border:1px solid #2a2a2a; border-radius:10px;
+  padding:12px 14px; font-size:16px;
+  outline:none;
+}
+.search-close{
+  background:transparent; border:none; color:#d9d9d9; cursor:pointer;
+  font-size:14px; padding:8px 10px; border-radius:8px;
+}
+.search-close:hover{ background:#1b1b1b; }
+.search-hint{ font-size:12px; color:#9a9a9a; margin-top:8px; }
+.search-results{ margin-top:14px; font-size:13px; color:#bdbdbd; }
+
+/* Cards filtering helper (hide when not matched) */
+.card.is-filtered-out{ display:none !important; }
+
+
+/* === Fix: header above content only when no overlay; logo blend; overlay z-index === */
+/* Keep header on top for normal scroll, but any viewer/search must sit above it */
+header{ z-index: 1000 !important; }
+.sheet{
+  position: fixed !important;
+  inset: 0 !important;
+  z-index: 3001 !important; /* Above header and search */
+}
+
+/* Default: make the logo (img or svg) blend like Instagram's inverse look */
+header img.logo,
+header .logo img,
+header .brand img,
+header .brand svg,
+header svg.logo {
+  mix-blend-mode: difference;
+  /* filters help when difference can't be computed cleanly */
+  filter: invert(1) contrast(1.1);
+}
+
+/* When any overlay/viewer is open, disable blending so nothing is in difference */
+
+
+/* Also ensure the search overlay stays on top of the header */
+#search-overlay{ z-index: 3002 !important; }
+
+
+/* === Critical fix: viewer overlay above header === */
+.overlay{ z-index: 4000 !important; mix-blend-mode: normal !important; }
+/* Safety: when any viewer/search is open, hide header from view/clicks */
+
+
+
+/* === Disable 'difference' blends everywhere & improve readability === */
+/* Turn off any difference on logo/SVG/overlays */
+header img.logo,
+header .logo img,
+header .brand img,
+header .brand svg,
+header svg.logo,
+.card .meta,
+.badge,
+.card .meta svg,
+.card .badge svg,
+svg.blend-difference,
+.caption{
+  mix-blend-mode: normal !important;
+  filter: none !important;
+}
+
+/* Keep overlay text readable with a subtle bottom gradient scrim */
+.media{ position:relative; overflow:hidden; }
+.media::after{
+  content:"";
+  position:absolute; left:0; right:0; bottom:0; height:48%;
+  background:linear-gradient(to bottom, rgba(0,0,0,0) 0%, rgba(0,0,0,.35) 60%, rgba(0,0,0,.65) 100%);
+  pointer-events:none; z-index:1;
+}
+/* Place .meta above the scrim, with plain white text */
+.meta{
+  position:absolute; left:0; right:0; bottom:0;
+  padding:10px 10px 12px;
+  background:transparent !important;
+  color:#ffffff !important;
+  z-index:2;
+}
+.badge{ color:#ffffff !important; background:rgba(0,0,0,.45) !important; mix-blend-mode:normal !important; }
+
+/* Ensure viewer/search remain normal (no blends) */
+.sheet *,
+#search-overlay *{ mix-blend-mode: normal !important; filter:none !important; }
+
+
+/* === Searchable content & chips === */
+.tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}
+.chip{display:inline-flex;align-items:center;gap:6px;font-size:11px;
+  padding:4px 8px;border:1px solid #2a2a2a;border-radius:999px;color:#cfcfcf;background:rgba(255,255,255,0.03)}
+.title{font-weight:700}
+.sub{opacity:.85}
+
+
+/* === Fancy search overlay with instant results === */
+#search-overlay{opacity:0; transition:opacity .18s ease;}
+#search-overlay.open{opacity:1;}
+.search-panel{transform:translateY(-6px); transition:transform .22s ease, opacity .22s ease; opacity:.98;}
+#search-overlay.open .search-panel{transform:translateY(0); opacity:1;}
+.search-list{margin-top:14px; max-height:60vh; overflow:auto; padding:6px; display:grid; gap:8px}
+.search-item{display:grid; grid-template-columns:54px 1fr auto; gap:10px; align-items:center;
+  padding:8px 10px; border:1px solid #222; border-radius:12px; background:#0e0e0e; cursor:pointer}
+.search-item:hover{background:#141414; border-color:#2a2a2a}
+.search-thumb{width:54px; height:54px; border-radius:8px; object-fit:cover; background:#000}
+.search-title{font-weight:700; font-size:14px; color:#ececec}
+.search-sub{font-size:12px; color:#a9a9a9}
+.search-price{font-weight:700; font-size:13px; color:#e6e6e6; padding-left:8px}
+/* Card highlight when jumping from results */
+@keyframes glow{0%{box-shadow:0 0 0 0 rgba(255,255,255,.0)} 50%{box-shadow:0 0 0 4px rgba(255,255,255,.25)} 100%{box-shadow:0 0 0 0 rgba(255,255,255,0)}}
+.card.glow{animation:glow 1.6s ease-out 1; border-radius:6px}
+
+
+/* === Mobile Responsiveness === */
+/* Defaults: 3-up grid like IG on mobile */
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:2px;padding:2px}
+@media (max-width:360px){.grid{grid-template-columns:repeat(2,1fr)}}
+@media (min-width:900px){.grid{grid-template-columns:repeat(4,1fr)}}
+@media (min-width:1400px){.grid{grid-template-columns:repeat(5,1fr)}}
+
+/* Media fits squares */
+.media{aspect-ratio:1/1!important;position:relative;overflow:hidden}
+.media img,.media video{width:100%!important;height:100%!important;object-fit:cover!important;display:block}
+
+/* Header safe-area and spacing */
+header{padding-top:calc(env(safe-area-inset-top,0) + 6px);padding-bottom:8px;padding-left:12px;padding-right:12px}
+header .actions{right:clamp(10px,2vw,16px);top:calc(env(safe-area-inset-top,0) + 50%);transform:translateY(-50%)}
+/* Keep header compact on very small screens */
+@media (max-width:480px){
+  :root{--logo-size-max:46px;--logo-size-min:22px}
+}
+
+/* Search overlay: full-screen on small screens */
+@media (max-width:560px){
+  #search-overlay.open{opacity:1}
+  .search-panel{left:0;top:0;transform:none;width:100vw;height:100vh;border-radius:0;padding:12px}
+  .search-head{gap:8px}
+  .search-input{font-size:16px;padding:14px 14px}
+  .search-list{max-height:calc(100vh - 160px);padding-bottom:calc(env(safe-area-inset-bottom,0) + 12px)}
+  .search-item{grid-template-columns:50px 1fr auto}
+  .search-thumb{width:50px;height:50px}
+}
+
+/* Improve tap targets */
+.search-btn{padding:10px}
+.search-close{padding:10px 12px}
+
+/* Quick-view: ensure scroll on small screens */
+.sheet{overflow:auto;-webkit-overflow-scrolling:touch}
+
+
+/* === WhatsApp floating button (mobile-first) === */
+.fab-whatsapp{
+  position:fixed; z-index:2200;
+  right:clamp(12px,3vw,18px);
+  bottom:calc(env(safe-area-inset-bottom,0) + 16px);
+  width:56px; height:56px; border-radius:999px;
+  background:#25D366; color:#fff; display:flex; align-items:center; justify-content:center;
+  box-shadow:0 8px 20px rgba(0,0,0,.35); text-decoration:none;
+}
+.fab-whatsapp svg{ width:28px; height:28px; display:block; fill:currentColor }
+/* Slightly larger on big screens */
+@media (min-width:900px){ .fab-whatsapp{ width:60px; height:60px } .fab-whatsapp svg{ width:30px; height:30px }}
+
+/* === Touch swipe carousels (no arrows needed) === */
+.media[data-carousel], .carousel, .slides{
+  display:flex; overflow-x:auto; scroll-snap-type:x mandatory;
+  -webkit-overflow-scrolling:touch; gap:0;
+}
+.media[data-carousel] > img, .carousel > *, .slides > *{
+  flex:0 0 100%; width:100%; height:100%; scroll-snap-align:center; object-fit:cover;
+}
+/* Hide scrollbars for a clean look */
+.media[data-carousel]::-webkit-scrollbar, .carousel::-webkit-scrollbar, .slides::-webkit-scrollbar{ display:none }
+.media[data-carousel]{ scrollbar-width:none; }
+/* Keep flag visible above the swipe area */
+.media .flag{ pointer-events:none }
+
+
+/* === Search Clear button === */
+.search-clear{
+  background:transparent;border:1px solid #2a2a2a;color:#d9d9d9;border-radius:8px;
+  padding:8px 10px;cursor:pointer;margin-left:6px
+}
+.search-clear:hover{background:#1a1a1a}
+
+/* Clickable logo affordance */
+header img.logo, header .logo img, header .brand img, header .brand svg, header svg.logo{ cursor:pointer }
+
+
+/* === Feed refinements (mobile-first) === */
+/* 2 columns on mobile by default */
+.grid{grid-template-columns:repeat(2,1fr)!important}
+@media (max-width:360px){.grid{grid-template-columns:repeat(2,1fr)!important}}
+@media (min-width:900px){.grid{grid-template-columns:repeat(4,1fr)!important}}
+@media (min-width:1400px){.grid{grid-template-columns:repeat(5,1fr)!important}}
+
+/* Taller images on the main feed (4:5 like IG portrait) */
+.card .media{aspect-ratio:4/5!important}
+
+/* Make feed text smaller and tighter */
+.card .meta{gap:1px!important;padding:8px 8px 10px!important}
+.card .meta .title{font-size:12px!important;line-height:1.2;margin:0 0 2px 0!important}
+.card .meta .sub{font-size:11px!important;line-height:1.2;margin:0!important;opacity:.9}
+.card .meta .tags .chip{font-size:10px!important;padding:3px 6px!important}
+
+
+/* === Remove header bar under the logo === */
+header{
+  background:transparent !important;
+  backdrop-filter:none !important;
+  -webkit-backdrop-filter:none !important;
+  box-shadow:none !important;
+  border-bottom:none !important;
+}
+
+
+/* === Style request (WhatsApp) — main feed only === */
+#style-request-btn{
+  position:fixed;
+  right:clamp(12px,3vw,18px);
+  bottom:calc(env(safe-area-inset-bottom,0) + 18px);
+  z-index:2200;
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+  padding:10px 14px;
+  border-radius:999px;
+  background:#F4E38A; /* modern pale yellow */
+  color:#ffffff; /* text white */
+  text-decoration:none;
+  font:600 13px/1.1 system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji","Segoe UI Emoji";
+  box-shadow:0 10px 26px rgba(0,0,0,.28);
+  -webkit-tap-highlight-color: transparent;
+}
+#style-request-btn svg{ width:16px;height:16px; display:block; fill:#ffffff }
+/* Hide when a viewer is open (expects a global .viewer-open class if present) */
+html.viewer-open #style-request-btn{ display:none !important; }
+
+
+/* === Search 'Style request' button (match Clear size/type) === */
+.search-style{
+  background:#F4E38A;
+  border:1px solid #ECDD7A;
+  color:#0b0b0b;
+  border-radius:8px;
+  padding:8px 10px;          /* same as Clear */
+  cursor:pointer;
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+  text-decoration:none;
+  margin-left:6px;           /* align spacing with Clear */
+  font:inherit;              /* same typeface & size as Clear */
+  line-height:inherit;       /* match Clear vertical rhythm */
+}
+.search-style:hover{ filter:brightness(.95) }
+.search-style svg{ width:14px;height:14px; display:block; fill:currentColor }
+
+
+/* === Make Clear button match Style request size === */
+.search-head .search-clear{
+  padding:8px 10px !important;   /* same padding as .search-style */
+  display:inline-flex !important; /* ensure same height/box model */
+  align-items:center !important;
+  line-height:inherit !important;
+  font:inherit !important;
+  border-radius:8px !important;   /* match rounded corners */
+}
+
+
+/* === Desktop responsiveness & viewer fixes === */
+
+/* Center search panel on desktop */
+@media (min-width: 1024px){
+  #search-overlay .search-panel{
+    left:50% !important;
+    top:50% !important;
+    transform:translate(-50%, -50%) !important;
+    width:min(900px, 70vw) !important;
+  }
+  .search-head{
+    justify-content:center;
+  }
+}
+
+/* Make overlay layers safe above header */
+.overlay, .sheet, #search-overlay{ z-index: 4000 !important; }
+header{ z-index: 1000 !important; }
+
+/* Desktop quick-view: media left, content right */
+@media (min-width: 1024px){
+  .sheet .body{
+    display:grid !important;
+    grid-template-columns:minmax(520px, 58%) minmax(360px, 42%) !important;
+    gap:0 !important;
+    align-items:start !important;
+    height:100vh;
+  }
+  .sheet .frame{
+    position:sticky; top:0;
+    height:100vh; max-height:100vh;
+    border:none !important; border-radius:0 !important;
+    background:#000;
+  }
+  .sheet .frame .media,
+  .sheet .frame img,
+  .sheet .frame video{
+    width:100% !important; height:100% !important; object-fit:contain !important;
+    background:#000;
+  }
+  .sheet .meta{
+    position:relative !important;
+    padding:24px !important;
+    overflow:auto; max-height:100vh;
+    background:transparent !important;
+    color:inherit !important;
+  }
+}
+
+/* Tweak search list height on tall desktops */
+@media (min-width: 1024px){
+  .search-list{ max-height:min(60vh, 560px); }
+}
+
+
+/* === Force 4:5 aspect ratio everywhere (IG style) === */
+.card .media,
+.media,
+.sheet .frame .media,
+.sheet .media { aspect-ratio: 4 / 5 !important; }
+.media img, .media video { width:100% !important; height:100% !important; object-fit: cover !important; }
+
+
+/* Highlight for matched terms in search */
+mark.hl{ background:transparent; color:#ffd54a; font-weight:700; }
+
+
+/* === Desktop search head layout fixes === */
+@media (min-width: 1024px){
+  #search-overlay .search-panel .search-head{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:10px;
+    flex-wrap:wrap; /* allow buttons to wrap under the input if needed */
+  }
+  #search-overlay .search-panel .search-input{
+    flex:1 1 520px;    /* give input a sensible width on desktop */
+    min-width:420px;
+    max-width:640px;
+  }
+  #search-overlay .search-panel .search-clear,
+  #search-overlay .search-panel .search-style{
+    white-space:nowrap;           /* keep label on one line */
+    padding:8px 10px;             /* same height/size */
+    border-radius:8px;            /* rounded corners like Clear */
+  }
+}
+
+
+/* === iPhone swipe reliability (carousel) === */
+.media[data-carousel], .slides{
+  display:flex !important;
+  overflow-x:auto !important;
+  scroll-snap-type:x mandatory !important;
+  -webkit-overflow-scrolling:touch !important;
+  touch-action: pan-x !important;
+  gap:0 !important;
+}
+.media[data-carousel] > *, .slides > *{
+  flex:0 0 100% !important;
+  width:100% !important;
+  scroll-snap-align:center !important;
+}
+.media{ pointer-events:auto !important; }
+.media::-webkit-scrollbar, .slides::-webkit-scrollbar{ display:none }
+
+
+/* === Request quote (viewer only, overlapping) === */
+#wa-quote{
+  position:fixed;
+  left:50%; transform:translateX(-50%);
+  bottom:calc(env(safe-area-inset-bottom,0) + 14px);
+  z-index:5200;
+  display:none;
+  align-items:center; gap:10px;
+  padding:12px 16px;
+  border-radius:999px;
+  background:#25D366;
+  color:#0c0c0c;
+  font:600 14px/1 system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial;
+  text-decoration:none;
+  box-shadow:0 10px 26px rgba(0,0,0,.35);
+}
+#wa-quote svg{ width:18px; height:18px; display:block; fill:#0c0c0c }
+html.viewer-open #wa-quote{ display:flex; }
+
+
+/* === Remove viewer footer visually (safety) === */
+.sheet .footer, .overlay .footer{ display:none !important; visibility:hidden !important; pointer-events:none !important; }
+
+
+/* === Always-visible header (logo + search) === */
+header{
+  position: sticky !important;
+  top: 0;
+  z-index: 1200 !important; /* below overlays (4k) but above content */
+  background: transparent;  /* keep your transparent look */
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+  box-shadow: none;
+  border-bottom: none;
+}
+/* Ensure the search icon stays at the right, vertically centered */
+header .actions{
+  position: absolute;
+  right: clamp(10px, 2vw, 16px);
+  top: 50%;
+  transform: translateY(-50%);
+}
+/* Keep a touch-friendly target for the search button */
+header .search-btn{ padding: 10px; }
+
+
+/* === Fixed header: logo + search always visible === */
+:root{ --header-h: 64px; }
+header{
+  position:fixed !important; top:0; left:0; right:0;
+  z-index: 3000 !important; /* below overlays (>=4000) */
+  background:transparent; backdrop-filter:none; -webkit-backdrop-filter:none;
+  box-shadow:none; border-bottom:none;
+}
+/* reserve space so content isn't hidden behind fixed header */
+body{ padding-top: var(--header-h); }
+@media (max-width:480px){ :root{ --header-h: 56px; } }
+header .actions{ position:absolute; right:clamp(10px,2vw,16px); top:50%; transform:translateY(-50%); }
+header .search-btn{ padding:10px; }
+
+
+/* === iPhone swipe reliability (carousel) === */
+.media[data-carousel], .slides{
+  display:flex !important;
+  overflow-x:auto !important;
+  scroll-snap-type:x mandatory !important;
+  -webkit-overflow-scrolling:touch !important;
+  touch-action: pan-x !important;
+  gap:0 !important;
+}
+.media[data-carousel] > *, .slides > *{
+  flex:0 0 100% !important;
+  width:100% !important;
+  scroll-snap-align:center !important;
+}
+.media::-webkit-scrollbar, .slides::-webkit-scrollbar{ display:none }
+
+
+/* === 'NEW' badge on media with blend === */
+.badge-new{
+  position:absolute; left:10px; top:10px; z-index:5;
+  padding:6px 10px; border-radius:999px;
+  font:700 11px/1 system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial;
+  letter-spacing:.06em; text-transform:uppercase;
+  pointer-events:none;
+  color:#fff;
+  background:transparent;
+  mix-blend-mode:difference;
+  border:1px solid rgba(255,255,255,.85);
+}
+/* Fallback if mix-blend-mode not supported */
+@supports not (mix-blend-mode:difference){
+  .badge-new{ background:rgba(0,0,0,.55); color:#fff; border-color:rgba(255,255,255,.25) }
+}
+
+/* Ensure media is the blending backdrop */
+.card .media{ position:relative; isolation:isolate; }
+
+/* === Carousel indicators: active dot + numeric position === */
+.dots .dot{ opacity:.5; transform:scale(.9); transition:transform .18s ease, opacity .18s ease }
+.dots .dot.is-active{ opacity:1; transform:scale(1.2) }
+
+.slide-indicator{
+  position:absolute; right:10px; top:10px; z-index:6;
+  padding:6px 8px; border-radius:999px;
+  font:600 12px/1 system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial;
+  color:#fff; background:rgba(0,0,0,.35); backdrop-filter:saturate(1.2) blur(2px);
+}
+/* Try difference on bright images for the counter too */
+@supports (mix-blend-mode:difference){
+  .slide-indicator.use-blend{ mix-blend-mode:difference; background:transparent; border:1px solid rgba(255,255,255,.75) }
+}
+
+
+/* === Search overlay visual polish (no pills) === */
+#search-overlay .search-panel{
+  padding:16px;
+}
+/* Desktop centered panel */
+@media (min-width:1024px){
+  #search-overlay .search-panel{
+    left:50% !important; top:50% !important; transform:translate(-50%,-50%) !important;
+    width:min(840px, 78vw) !important;
+  }
+}
+/* Header row: input + Clear on the right */
+#search-overlay .search-head{
+  display:flex; align-items:center; gap:10px;
+}
+#search-overlay .search-input{
+  flex:1 1 auto;
+  min-height:44px;
+}
+#search-overlay .search-clear{
+  background:transparent; border:1px solid #2a2a2a; color:#d9d9d9;
+  border-radius:8px; padding:8px 10px; cursor:pointer;
+}
+/* "Style request" as a small link below input (not a pill) */
+#search-overlay .search-style-link{
+  margin-top:6px; display:inline-flex; align-items:center; gap:6px;
+  color:#d9d9d9; text-decoration:none; font-weight:600; opacity:.85;
+}
+#search-overlay .search-style-link:hover{ opacity:1 }
+#search-overlay .search-style-link svg{ width:14px; height:14px; fill:currentColor; display:block }
+
+/* Divider under header; sticky subheader with results count + sort */
+#search-overlay .search-subbar{
+  position:sticky; top:0; z-index:2;
+  display:flex; align-items:center; justify-content:space-between; gap:8px;
+  padding:8px 0; margin-top:8px;
+  border-bottom:1px solid rgba(255,255,255,.08);
+  background:rgba(0,0,0,.35);
+  backdrop-filter:saturate(1.2) blur(2px);
+}
+@supports (backdrop-filter: blur(2px)){
+  #search-overlay .search-subbar{ background:rgba(0,0,0,.15) }
+}
+#search-overlay .search-meta{ opacity:.9 }
+/* Results list rows */
+#search-overlay .search-list{ margin-top:8px }
+#search-overlay .search-item{
+  display:grid; grid-template-columns:68px 1fr auto; align-items:center; gap:12px;
+  padding:10px 6px; border-radius:10px;
+}
+#search-overlay .search-item:hover{ background:rgba(255,255,255,.04) }
+#search-overlay .search-item:focus-within{ outline:2px solid #7aa2ff; outline-offset:2px }
+#search-overlay .search-thumb{ width:68px; height:68px; border-radius:8px; object-fit:cover }
+#search-overlay .search-title{ font-weight:650 }
+#search-overlay .search-sub{ opacity:.8; font-size:.95em; margin-top:2px }
+#search-overlay .search-price{ opacity:.9; font-weight:650; margin-left:8px }
+
+/* Highlighting */
+mark.hl{ background:transparent; color:#ffd54a; font-weight:700; }
+
+/* Empty state with inline links */
+#search-overlay .search-empty{ opacity:.9; padding:8px 2px }
+#search-overlay .search-empty .sugs{ display:flex; flex-wrap:wrap; gap:10px; margin-top:6px }
+#search-overlay .search-empty .sugs a{ color:#d9d9d9; text-decoration:none; display:inline-flex; align-items:center; gap:6px; }
+#search-overlay .search-empty .sugs a:hover{ text-decoration:underline }
+#search-overlay .search-empty .sugs svg{ width:12px; height:12px; fill:currentColor }
+
+/* Mobile edge-to-edge */
+@media (max-width:560px){
+  #search-overlay .search-panel{ left:0; top:0; transform:none; width:100vw; height:100vh; border-radius:0; padding:12px }
+  #search-overlay .search-head{ gap:8px }
+  #search-overlay .search-input{ min-height:46px }
+  #search-overlay .search-list{ max-height:calc(100vh - 150px) }
+}
+
+/* Subtle appear for list rows */
+#search-overlay .search-item{ opacity:0; transform:translateY(4px); transition:opacity .16s ease, transform .16s ease }
+#search-overlay .search-item.show{ opacity:1; transform:translateY(0) }
+
+
+/* === Style request link: pale yellow brand color === */
+#search-overlay .search-style-link{
+  color:#F4E38A !important;
+}
+#search-overlay .search-style-link svg{
+  fill:currentColor !important;
+}
+#search-overlay .search-style-link:hover{
+  opacity:1;
+  text-decoration:underline;
+}
+
+</style>
 </head>
 <body>
-  <header>
-    <div class="inner">
-      <a class="logo" href="/" aria-label="Home">HANDBAGS</a>
-      <button class="search-btn" aria-label="Open search">
-        <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001l3.85 3.85a1 1 0 0 0 1.415-1.415l-3.867-3.833zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"/></svg>
+<header>
+  <div class="brand"><img src="logo.svg" alt="Logo" class="logo"></div>
+  <div class="controls">
+    <input id="q" class="input" type="search" inputmode="search" enterkeyhint="search" autocapitalize="none" autocorrect="off" spellcheck="false" placeholder="Search by name, brand, material…">
+    <select id="fBrand" class="select"><option value="">All Brands</option></select>
+    <select id="fCat" class="select"><option value="">All Categories</option></select>
+    <select id="fMat" class="select"><option value="">All Materials</option></select>
+    <select id="fCol" class="select"><option value="">All Colors</option></select>
+  </div>
+  <div class="filters-mobile">
+    <div id="chipsBrand" class="chips"></div>
+    <div id="chipsCat" class="chips"></div>
+  </div>
+
+    <div class="actions">
+      <button class="search-btn" aria-label="Search" title="Search">
+        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="2"/>
+          <line x1="16.65" y1="16.65" x2="22" y2="22" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+        </svg>
       </button>
     </div>
-  </header>
+    
+</header>
 
-  <main>
-    <section class="grid" id="grid" aria-live="polite"></section>
-  </main>
+<main class="grid" id="grid"></main>
 
-  <!-- Viewer -->
-  <div class="overlay" id="overlay" aria-hidden="true"></div>
-  <div class="sheet" id="viewer" aria-hidden="true" role="dialog" aria-modal="true" aria-label="Item viewer">
+<div class="overlay" id="overlay" aria-hidden="true">
+  <div class="sheet" role="dialog" aria-modal="true" aria-label="Quick view">
+    <div class="topbar">
+      <button class="btn icon" id="btnClose" aria-label="Close">
+        <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+      <div class="caption" id="cap"></div>
+      <button class="btn icon" id="btnShare" aria-label="Share">
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 12v7a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-7"/><path d="M16 6l-4-4-4 4"/><path d="M12 2v14"/></svg>
+      </button>
+    </div>
     <div class="body">
-      <div class="frame">
-        <div class="media">
+      <div>
+        <div class="frame" id="frame">
           <div class="slides" id="slides"></div>
+          <div class="arrow left" id="prev"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg></div>
+          <div class="arrow right" id="next"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg></div>
           <div class="dots" id="dots"></div>
-          <div class="slide-indicator" id="slideIndicator">1 / 1</div>
         </div>
       </div>
-      <div class="detail" id="detail">
-        <button id="closeViewer" aria-label="Close" style="border:1px solid #2a2a2a;background:transparent;color:#e6e6e6;border-radius:8px;padding:6px 10px;float:right">Close</button>
-        <h2 id="dTitle"></h2>
-        <div class="line" id="dMeta"></div>
-        <div class="line" id="dPrice"></div>
-        <p id="dDesc"></p>
+      <div class="meta">
+        <div class="h1" id="pTitle"></div>
+        <div class="kv">
+          <span class="pill" id="pBrand"></span>
+          <span class="pill" id="pCat"></span>
+          <span class="pill" id="pMat"></span>
+          <span class="pill" id="pCol"></span>
+        </div>
+        <div class="desc" id="pDesc"></div>
+        <a id="btnOriginal" class="btn btn-black" target="_blank" rel="noopener" style="gap:12px;margin:10px 0 6px;">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M10 13a5 5 0 1 0-7 7 5 5 0 0 0 7-7Z"/><path d="M21 3l-9 9"/><path d="M22 7V2h-5"/>
+          </svg>
+          View original
+        </a>
+        <ul class="specs" id="pSpecs"></ul>
       </div>
     </div>
-  </div>
-
-  <!-- Request quote (viewer-only floating) -->
-  <a id="wa-quote" href="https://wa.me/?text=Hi%2C%20I%27d%20like%20a%20quote%20for%20this%20item" target="_blank" rel="noopener" aria-label="Request quote on WhatsApp">
-    <svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 2a10 10 0 0 0-8.94 14.5L2 22l5.67-1.47A10 10 0 1 0 12 2zm0 18a8 8 0 0 1-4.06-1.1l-.28-.16-3.03.78.82-2.94-.17-.27A8 8 0 1 1 12 20zm4.18-6.36c-.2-.12-1.23-.72-1.42-.8-.19-.08-.33-.12-.46.12-.13.24-.53.87-.65 1.05-.12.18-.24.2-.45.1-.2-.1-.86-.32-1.63-.98-.6-.52-1-1.14-1.12-1.32-.12-.18-.01-.29.1-.41.1-.11.23-.29.34-.43.11-.14.15-.24.22-.4.07-.16.03-.29-.02-.41-.05-.12-.47-1.2-.64-1.65-.17-.45-.36-.39-.5-.4l-.44-.01c-.15 0-.39.05-.59.27-.2.22-.78.76-.78 1.86s.79 2.16.9 2.31c.11.14 1.55 2.38 3.77 3.36.53.23.95.37 1.27.47.53.17 1 .14 1.37.09.42-.06 1.37-.56 1.56-1.08.2-.52.2-.97.13-1.08-.06-.11-.21-.17-.46-.29z"/></svg>
-    <span>Request quote</span>
-  </a>
-
-  <!-- Search overlay -->
-  <div id="search-overlay" aria-hidden="true">
-    <div class="search-panel" role="dialog" aria-modal="true" aria-label="Search">
-      <div class="search-head">
-        <input id="global-search-input" class="search-input" type="search" placeholder="Search brand, color, material…" autocomplete="off" />
-        <button class="search-clear" id="search-clear-btn" aria-label="Clear search">Clear</button>
-      </div>
-      <div><a class="search-style-link" id="search-style-link" href="https://wa.me/?text=I%20want%20to%20request%20a%20specific%20style" target="_blank" rel="noopener" aria-label="Style request via WhatsApp">
-        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2a10 10 0 0 0-8.94 14.5L2 22l5.67-1.47A10 10 0 1 0 12 2zm0 18a 8 8 0 0 1-4.06-1.1l-.28-.16-3.03.78.82-2.94-.17-.27A8 8 0 1 1 12 20zm4.18-6.36c-.2-.12-1.23-.72-1.42-.8-.19-.08-.33-.12-.46.12-.13.24-.53.87-.65 1.05-.12.18-.24.2-.45.1-.2-.1-.86-.32-1.63-.98-.6-.52-1-1.14-1.12-1.32-.12-.18-.01-.29.1-.41.1-.11.23-.29.34-.43.11-.14.15-.24.22-.4.07-.16.03-.29-.02-.41-.05-.12-.47-1.2-.64-1.65-.17-.45-.36-.39-.5-.4l-.44-.01c-.15 0-.39.05-.59.27-.2.22-.78.76-.78 1.86s.79 2.16.9 2.31c.11.14 1.55 2.38 3.77 3.36.53.23.95.37 1.27.47.53.17 1 .14 1.37.09.42-.06 1.37-.56 1.56-1.08.2-.52.2-.97.13-1.08-.06-.11-.21-.17-.46-.29z"/></svg>
-        <span>Style request</span></a>
-      </div>
-      <div class="search-subbar"><div class="search-meta" id="search-meta">Showing all items</div></div>
-      <div class="search-list" id="search-list"></div>
-      <div id="search-results-hint" style="display:none;"></div>
-      <button id="search-close-btn" aria-label="Close search" style="position:absolute;top:8px;right:8px;border:1px solid #2a2a2a;background:transparent;color:#e6e6e6;border-radius:8px;padding:6px 10px">Close</button>
+    <div class="footer">
+      <a id="cta" class="wa-cta" target="_blank" rel="noopener" aria-label="Request Quote">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" fill="none"><path fill="#128C7E" d="M16 0C7.164 0 0 7.163 0 16c0 2.82.737 5.467 2.023 7.762L.132 31.868 8.36 29.98A15.91 15.91 0 0 0 16 32c8.836 0 16-7.163 16-16S24.836 0 16 0z"/><path fill="#FFF" d="M23.59 19.476c-.365.998-1.8 1.826-2.51 1.946-.67.112-1.52.16-2.45-.154-2.997-1.04-4.946-3.596-5.317-4.052-.37-.456-1.268-1.686-1.268-3.216s.801-2.28 1.085-2.598c.282-.317.62-.396.826-.396.205 0 .41.002.592.011.19.009.445-.072.697.53.263.63.897 2.176.976 2.334.079.158.131.342.023.558-.105.224-.16.361-.314.556-.158.198-.332.444-.473.596-.154.165-.314.347-.136.663.178.317.791 1.302 1.7 2.106 1.17 1.003 2.16 1.317 2.477 1.463.317.146.503.126.69-.075.187-.201.802-.933 1.018-1.253.216-.317.433-.266.717-.158.285.108 1.8.847 2.107 1 .308.153.513.236.59.365.079.128.079.739-.288 1.736z"/></svg>
+        Request Quote
+      </a>
     </div>
   </div>
+</div>
 
-  <script>
-  // Dynamically size header padding
-  (function(){
-    function syncHeaderHeight(){
-      const h = document.querySelector('header'); if (!h) return;
-      const px = h.getBoundingClientRect().height || 64;
-      document.documentElement.style.setProperty('--header-h', Math.round(px) + 'px');
+<script>
+// Data
+window.D
+<script>
+// CMS data loader: fetch products from /data/products.json and expose as window.DATA
+;(async function(){
+  try{
+    const res = await fetch('data/products.json', {cache: 'no-store'});
+    const json = await res.json();
+    window.DATA = json && json.products ? json : { products: [] };
+  }catch(e){
+    console.warn('No products.json yet or invalid JSON. Using empty dataset.', e);
+    window.DATA = { products: [] };
+  }
+  // If the original script expects to run on DOMContentLoaded, we dispatch it again
+  document.dispatchEvent(new Event('cms-data-ready'));
+})();
+</script>
+pers
+function $(id){return document.getElementById(id);}
+function norm(s){return (s||'').toString().toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'');}
+
+var grid=$('grid'), q=$('q'), fBrand=$('fBrand'), fCat=$('fCat'), fMat=$('fMat'), fCol=$('fCol');
+var chipsBrand=$('chipsBrand'), chipsCat=$('chipsCat');
+var overlay=$('overlay'), slides=$('slides'), dots=$('dots'), frame=$('frame');
+var btnClose=$('btnClose'), btnShare=$('btnShare'), cap=$('cap'), pTitle=$('pTitle'), pDesc=$('pDesc');
+var pBrand=$('pBrand'), pCat=$('pCat'), pMat=$('pMat'), pCol=$('pCol'), pSpecs=$('pSpecs'), btnOriginal=$('btnOriginal'), cta=$('cta');
+var prevBtn=$('prev'), nextBtn=$('next');
+
+var LIST=[], FILTERED=[], CURRENT=null, SLIDE=0;
+
+function buildFilters(){
+  var brands=new Set(), cats=new Set(), mats=new Set(), cols=new Set();
+  window.DATA.products.forEach(function(p){brands.add(p.brand); cats.add(p.category); mats.add(p.material); cols.add(p.color);});
+  fBrand.innerHTML='<option value="">All Brands</option>'+Array.from(brands).sort().map(function(b){return '<option value="'+b+'">'+b+'</option>';}).join('');
+  fCat.innerHTML='<option value="">All Categories</option>'+Array.from(cats).sort().map(function(c){return '<option value="'+c+'">'+c+'</option>';}).join('');
+  fMat.innerHTML='<option value="">All Materials</option>'+Array.from(mats).sort().map(function(m){return '<option value="'+m+'">'+m+'</option>';}).join('');
+  fCol.innerHTML='<option value="">All Colors</option>'+Array.from(cols).sort().map(function(c){return '<option value="'+c+'">'+c+'</option>';}).join('');
+  chipsBrand.innerHTML='<button class="chip active" data-v="">All</button>'+Array.from(brands).sort().map(function(b){return '<button class="chip" data-v="'+b+'">'+b+'</button>';}).join('');
+  chipsCat.innerHTML='<button class="chip active" data-v="">All categories</button>'+Array.from(cats).sort().map(function(c){return '<button class="chip" data-v="'+c+'">'+c+'</button>';}).join('');
+  chipsBrand.addEventListener('click',function(e){ if(e.target.matches('.chip')){ Array.from(chipsBrand.children).forEach(function(x){x.classList.remove('active');}); e.target.classList.add('active'); fBrand.value=e.target.getAttribute('data-v'); rebuild(); } });
+  chipsCat.addEventListener('click',function(e){ if(e.target.matches('.chip')){ Array.from(chipsCat.children).forEach(function(x){x.classList.remove('active');}); e.target.classList.add('active'); fCat.value=e.target.getAttribute('data-v'); rebuild(); } });
+}
+
+function passFilters(p){
+  var qq=norm(q.value.trim());
+  var brand=fBrand.value, cat=fCat.value, mat=fMat.value, col=fCol.value;
+  var blob=norm([p.title,p.brand,p.category,p.material,p.color,(p.badges||[]).join(' ')].join(' '));
+  var tokens=qq.split(/\s+/).filter(Boolean);
+  var mq=!tokens.length||tokens.every(function(t){return blob.indexOf(t)>-1;});
+  var mb=!brand||p.brand===brand, mc=!cat||p.category===cat, mm=!mat||p.material===mat, mcol=!col||p.color===col;
+  return mq && mb && mc && mm && mcol;
+}
+
+function rebuild(){ buildGrid(); }
+
+function buildGrid(){
+  LIST=window.DATA.products.slice();
+  FILTERED=LIST.filter(passFilters);
+  grid.innerHTML='';
+  if(!FILTERED.length){ grid.innerHTML='<div style="padding:24px;color:var(--muted);font-size:14px;">No results. Try clearing filters or search “crossbody”, “tote”, “lambskin”.</div>'; return; }
+  FILTERED.forEach(function(p){
+    var card=document.createElement('div'); card.className='card'; card.dataset.slug=p.slug;
+    var media=document.createElement('div'); media.className='media';
+    var first=p.images[0];
+    if(first.type==='video'){ var v=document.createElement('video'); v.src=first.src; if(first.poster) v.poster=first.poster; v.muted=true; v.loop=true; v.autoplay=true; v.playsInline=true; v.setAttribute('playsinline',''); media.appendChild(v); }
+    else { var im=document.createElement('img'); im.src=first.src; im.alt=p.title; media.appendChild(im); }
+    if(p.badges && p.badges.length){ var b=document.createElement('div'); b.className='badge'; b.textContent=p.badges[0]; media.appendChild(b); }
+    card.appendChild(media);
+    var meta=document.createElement('div'); meta.className='meta';
+    meta.innerHTML='<div class="title">'+p.title+'</div><div class="sub">'+p.brand+' · '+p.category+'</div>';
+    var bmWrap=document.createElement('div'); bmWrap.className='brandmark';
+    var bm=document.createElement('div'); bm.className='bm'; bm.textContent=p.mono||'?';
+    var bmText=document.createElement('div'); bmText.style.fontSize='11px'; bmText.style.color='var(--muted)'; bmText.textContent=p.brand;
+    bmWrap.appendChild(bm); bmWrap.appendChild(bmText); meta.appendChild(bmWrap);
+    card.appendChild(meta);
+    card.onclick=function(){ openProduct(p.slug,0); };
+    grid.appendChild(card);
+  });
+}
+
+function iconSVG(name){
+  var base='currentColor';
+  if(name==='ruler') return '<svg class="spec-icon" viewBox="0 0 24 24" fill="none" stroke="'+base+'" stroke-width="2"><path d="M16 2l6 6L8 22l-6-6L16 2z"/><path d="M7 7l3 3"/><path d="M10 10l3 3"/><path d="M13 13l3 3"/></svg>';
+  if(name==='feather') return '<svg class="spec-icon" viewBox="0 0 24 24" fill="none" stroke="'+base+'" stroke-width="2"><path d="M20 7a7.5 7.5 0 0 1-7 7H6l8-8a4.5 4.5 0 0 1 6 1z"/><path d="M6 13l1.5 1.5"/><path d="M8 11l1.5 1.5"/></svg>';
+  if(name==='sparkle') return '<svg class="spec-icon" viewBox="0 0 24 24" fill="none" stroke="'+base+'" stroke-width="2"><path d="M12 3l2.4 4.6L19 10l-4.6 2.4L12 17l-2.4-4.6L5 10l4.6-2.4L12 3z"/><path d="M20 20h.01"/><path d="M4 20h.01"/></svg>';
+  if(name==='strap') return '<svg class="spec-icon" viewBox="0 0 24 24" fill="none" stroke="'+base+'" stroke-width="2"><path d="M4 12a8 8 0 0 1 16 0"/><circle cx="12" cy="12" r="3"/></svg>';
+  if(name==='weight') return '<svg class="spec-icon" viewBox="0 0 24 24" fill="none" stroke="'+base+'" stroke-width="2"><path d="M5 7h14l-2 13H7L5 7z"/><path d="M9 7a3 3 0 0 1 6 0"/></svg>';
+  return '<svg class="spec-icon" viewBox="0 0 24 24" fill="none" stroke="'+base+'" stroke-width="2"><circle cx="12" cy="12" r="9"/></svg>';
+}
+
+function openProduct(slug,slide){
+  var idx=window.DATA.products.findIndex(function(x){return x.slug===slug;});
+  if(idx<0) return; CURRENT=idx; SLIDE=slide||0;
+  document.body.style.overflow='hidden'; overlay.classList.add('open'); renderSheet();
+}
+function closeProduct(){ overlay.classList.remove('open'); document.body.style.overflow=''; slides.innerHTML=''; dots.innerHTML=''; pSpecs.innerHTML=''; cap.textContent=''; pTitle.textContent=''; pDesc.textContent=''; }
+btnClose.onclick=closeProduct;
+overlay.addEventListener('click',function(e){ if(!e.target.closest('.sheet')) closeProduct(); });
+
+function renderSheet(){
+  var p=window.DATA.products[CURRENT];
+  pTitle.textContent=p.title;
+  pBrand.textContent=p.brand; pCat.textContent=p.category; pMat.textContent=p.material; pCol.textContent=p.color;
+  pDesc.textContent=p.description; pSpecs.innerHTML=(p.specs||[]).map(function(s){return '<li>'+iconSVG(s.icon||'dot')+(s.text||'')+'</li>';}).join('');
+  btnOriginal.href=p.original||'#';
+  var msg=encodeURIComponent('Hello, I\'m interested in: '+p.title+' — link: '+location.href);
+  cta.href='https://wa.me/00000000000?text='+msg;
+  slides.innerHTML='';
+  p.images.forEach(function(im){
+    var s=document.createElement('div'); s.className='slide';
+    if(im.type==='video'){ var v=document.createElement('video'); v.src=im.src; if(im.poster) v.poster=im.poster; v.controls=true; v.playsInline=true; v.setAttribute('playsinline',''); s.appendChild(v); }
+    else{ var el=document.createElement('img'); el.src=im.src; el.alt=p.title; s.appendChild(el); }
+    slides.appendChild(s);
+  });
+  buildDots(); updateSlides(); updateCap();
+}
+function buildDots(){
+  dots.innerHTML=''; var total=window.DATA.products[CURRENT].images.length;
+  for(var i=0;i<total;i++){ (function(i){ var d=document.createElement('div'); d.className='dot'+(i===SLIDE?' active':''); d.onclick=function(){ SLIDE=i; updateSlides(); updateCap(); }; dots.appendChild(d); })(i); }
+}
+function updateSlides(){ slides.style.transform='translateX(-'+(SLIDE*100)+'%)'; Array.from(dots.children).forEach(function(d,i){ d.classList.toggle('active',i===SLIDE); }); Array.from(slides.querySelectorAll('video')).forEach(function(v,i){ if(i===SLIDE){ v.muted=true; v.play().catch(function(){}); } else { try{ v.pause(); }catch(e){} } }); }
+function updateCap(){ var p=window.DATA.products[CURRENT]; cap.textContent=p.title+' — '+(SLIDE+1)+'/'+p.images.length; }
+nextBtn.onclick=function(){ var p=window.DATA.products[CURRENT]; if(SLIDE<p.images.length-1){ SLIDE++; updateSlides(); updateCap(); } };
+prevBtn.onclick=function(){ if(SLIDE>0){ SLIDE--; updateSlides(); updateCap(); } };
+
+btnShare.onclick=function(){
+  var p=window.DATA.products[CURRENT];
+  var url=location.href.split('#')[0]+'#/p/'+p.slug+'?slide='+SLIDE; var title=p.title;
+  try{ if(navigator.share){ navigator.share({title:title,url:url}); return; } }catch(e){}
+  try{ if(navigator.clipboard && window.isSecureContext){ navigator.clipboard.writeText(url); cap.textContent='Link copied'; setTimeout(updateCap,1200); return; } }catch(e){}
+  prompt('Copy this link', url);
+};
+
+function applySearchKey(e){ if(e.key==='Enter'){ e.preventDefault(); q.blur(); document.getElementById('grid').scrollIntoView({behavior:'smooth',block:'start'}); rebuild(); } }
+
+// Init
+document.addEventListener('DOMContentLoaded', function(){
+  buildFilters(); rebuild();
+  q.addEventListener('input', function(){ clearTimeout(window.__t); window.__t=setTimeout(rebuild,120); });
+  q.addEventListener('keydown', applySearchKey);
+  fBrand.addEventListener('input', rebuild); fCat.addEventListener('input', rebuild);
+  fMat.addEventListener('input', rebuild); fCol.addEventListener('input', rebuild);
+});
+</script>
+
+<script>
+(function(){
+  const header = document.querySelector('header');
+  if(!header) return;
+  const onScroll = () => {
+    if(window.scrollY > 10){ header.classList.add('scrolled'); }
+    else{ header.classList.remove('scrolled'); }
+  };
+  window.addEventListener('scroll', onScroll, {passive:true});
+  onScroll();
+})();
+</script>
+
+
+
+
+<div id="search-overlay" class="" aria-hidden="true">
+  <div class="search-panel" role="dialog" aria-modal="true" aria-label="Search">
+    <div class="search-head">
+      <input id="global-search-input" class="search-input" type="search" placeholder="Search brand, bag type, color, material…" autocomplete="off" />
+      <button class="search-close" id="search-close-btn" aria-label="Close">Esc</button>
+    </div>
+<div><a class="search-style-link" id="search-style-link" href="https://wa.me/?text=I%20want%20to%20request%20a%20specific%20style" target="_blank" rel="noopener" aria-label="Style request via WhatsApp"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2a10 10 0 0 0-8.94 14.5L2 22l5.67-1.47A10 10 0 1 0 12 2zm0 18a8 8 0 0 1-4.06-1.1l-.28-.16-3.03.78.82-2.94-.17-.27A8 8 0 1 1 12 20zm4.18-6.36c-.2-.12-1.23-.72-1.42-.8-.19-.08-.33-.12-.46.12-.13.24-.53.87-.65 1.05-.12.18-.24.2-.45.1-.2-.1-.86-.32-1.63-.98-.6-.52-1-1.14-1.12-1.32-.12-.18-.01-.29.1-.41.1-.11.23-.29.34-.43.11-.14.15-.24.22-.4.07-.16.03-.29-.02-.41-.05-.12-.47-1.2-.64-1.65-.17-.45-.36-.39-.5-.4l-.44-.01c-.15 0-.39.05-.59.27-.2.22-.78.76-.78 1.86s.79 2.16.9 2.31c.11.14 1.55 2.38 3.77 3.36.53.23.95.37 1.27.47.53.17 1 .14 1.37.09.42-.06 1.37-.56 1.56-1.08.2-.52.2-.97.13-1.08-.06-.11-.21-.17-.46-.29z"/></svg><span>Style request</span></a></div>
+    <div class="search-hint"><span id="search-count">0</span> results</div>
+    <div class="search-results" id="search-results-hint"></div>
+    <div class="search-list" id="search-list"></div>
+  <button class="search-clear" id="search-clear-btn" aria-label="Clear search">Clear</button></div>
+</div>
+<div class="search-hint"><span id="search-count">0</span> results</div>
+  </div>
+</div>
+<div class="search-hint"><span id="search-count">0</span> results</div>
+    <div class="search-results" id="search-results-hint"></div>
+  </div>
+</div>
+
+
+<script>
+(function(){
+  // ---- Smooth logo interpolation on scroll ----
+  const root = document.documentElement;
+  const max = 56, min = 24; // must match CSS
+  let ticking = false;
+  const update = () => {
+    const y = Math.max(0, window.scrollY || window.pageYOffset || 0);
+    const range = 160; // px of scroll to complete shrink
+    const t = Math.min(1, y / range);
+    const size = max - (max - min) * t;
+    root.style.setProperty('--logo-size', size + 'px');
+    ticking = false;
+  };
+  window.addEventListener('scroll', () => {
+    if (!ticking) {
+      window.requestAnimationFrame(update);
+      ticking = true;
     }
-    window.addEventListener('load', syncHeaderHeight);
-    window.addEventListener('resize', ()=> requestAnimationFrame(syncHeaderHeight));
-    setTimeout(syncHeaderHeight, 50);
-  })();
-  </script>
+  }, {passive:true});
+  update();
 
-  <script>
-  // Load products from /data/items.json (Decap CMS writes here)
-  (function(){
-    async function loadProducts(){
-      try{
-        const res = await fetch('/data/items.json', {cache:'no-store'});
-        const data = await res.json();
-        if (data && data.products){
-          window.DATA = data.products;
-          buildGrid(window.DATA);
-        }
-      }catch(e){ console.warn('Failed to load items.json', e); }
+  // ---- Media flags (carousel / video / image) ----
+  const FLAG_SVGS = {
+    carousel: '<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="7" width="12" height="10" rx="2"/><rect x="8" y="5" width="12" height="10" rx="2"/></svg>',
+    video: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 4h10a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2z"/><path d="M16 10l5-3v10l-5-3V10z" /></svg>',
+    image: '<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M7 14l3-3 3 3 4-4 3 3" fill="none" stroke="#fff" stroke-width="2"/></svg>'
+  };
+  function addFlag(el, type){
+    // avoid duplicates
+    if (el.querySelector('.flag')) return;
+    const d = document.createElement('div');
+    d.className = 'flag flag--' + type;
+    d.innerHTML = FLAG_SVGS[type] || FLAG_SVGS.image;
+    el.appendChild(d);
+  }
+  function detectFlags(){
+    document.querySelectorAll('.media').forEach(media => {
+      const hasVideo = media.querySelector('video');
+      const imgs = media.querySelectorAll('img');
+      const hasCarousel = media.hasAttribute('data-carousel') || media.classList.contains('carousel') || imgs.length > 1 || media.querySelectorAll('.slide').length > 1;
+      if (hasVideo) addFlag(media, 'video');
+      else if (hasCarousel) addFlag(media, 'carousel');
+      else addFlag(media, 'image');
+    });
+  }
+
+  // ---- Populate demo images with actual photos ----
+  const demoSeeds = Array.from({length: 60}, (_,i) => 'handbags-' + (i+1));
+  let seedIdx = 0;
+  function demoSrc(){
+    const seed = demoSeeds[seedIdx++ % demoSeeds.length];
+    // square to fit 1:1 crop
+    return 'https://picsum.photos/seed/' + seed + '/1200/1200';
+  }
+  function populatePhotos(){
+    document.querySelectorAll('.media').forEach(media => {
+      let imgs = media.querySelectorAll('img');
+      if (imgs.length === 0){
+        const img = document.createElement('img');
+        img.loading = 'lazy';
+        img.decoding = 'async';
+        img.alt = '';
+        img.src = demoSrc();
+        media.appendChild(img);
+        imgs = media.querySelectorAll('img');
+      } else {
+        imgs.forEach((img,i) => {
+          const src = (img.getAttribute('src') || '').toLowerCase();
+          const shouldReplace = !src || src.includes('placeholder') || src.includes('demo') || src.startsWith('data:');
+          if (shouldReplace){
+            img.src = demoSrc();
+          }
+          img.loading = 'lazy';
+          img.decoding = 'async';
+        });
+      }
+    });
+  }
+
+  // ---- Search overlay (open with icon or "/" key) ----
+  const overlay = document.getElementById('search-overlay');
+  const openBtn = document.querySelector('.search-btn');
+  const closeBtn = document.getElementById('search-close-btn');
+  const input = document.getElementById('global-search-input');
+  const countEl = document.getElementById('search-count');
+  const hintEl = document.getElementById('search-results-hint');
+  const cards = Array.from(document.querySelectorAll('.card'));
+
+  function openSearch(){
+    overlay.classList.add('open');
+    overlay.setAttribute('aria-hidden','false');
+    setTimeout(() => { input && input.focus(); }, 50);
+  }
+  function closeSearch(){
+    overlay.classList.remove('open');
+    overlay.setAttribute('aria-hidden','true');
+    if (input){ input.value = ''; filterCards(''); }
+  }
+  function filterCards(q){
+    const query = (q || '').trim().toLowerCase();
+    let hits = 0;
+    cards.forEach(card => {
+      const text = card.innerText.toLowerCase();
+      const match = !query || text.includes(query);
+      card.classList.toggle('is-filtered-out', !match);
+      if (match) hits++;
+    });
+    if (countEl) countEl.textContent = hits;
+    if (hintEl){
+      hintEl.textContent = query ? ('Showing ' + hits + ' results for "' + q + '"') : 'Type to search the grid';
     }
-    if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', loadProducts);
-    else loadProducts();
+  }
+
+  if (openBtn){
+    openBtn.addEventListener('click', (e)=>{ e.preventDefault(); openSearch(); });
+  }
+  if (closeBtn){
+    closeBtn.addEventListener('click', (e)=>{ e.preventDefault(); closeSearch(); });
+  }
+  window.addEventListener('keydown', (e)=>{
+    if (e.key === '/' && !e.metaKey && !e.ctrlKey && !e.altKey){
+      e.preventDefault(); openSearch();
+    } else if (e.key === 'Escape'){
+      closeSearch();
+    }
+  });
+  if (input){
+    input.addEventListener('input', (e)=>{ filterCards(e.target.value); });
+    input.addEventListener('keydown', (e)=>{
+      if (e.key === 'Enter'){
+        // Scroll to first visible card on Enter
+        const first = cards.find(c => !c.classList.contains('is-filtered-out'));
+        if (first){ first.scrollIntoView({behavior:'smooth', block:'start'}); }
+      }
+    });
+  }
+
+  // Run once on load
+  populatePhotos();
+  detectFlags();
+})();
+</script>
+
+
+<script>
+(function(){
+  const html = document.documentElement;
+  const search = document.getElementById('search-overlay');
+
+  function isSheetVisible() {
+    const s = document.querySelector('.sheet');
+    if (!s) return false;
+    const cs = getComputedStyle(s);
+    // consider visible if displayed and not fully transparent/hidden, or has common "open" traits
+    const visible = cs.display !== 'none' && cs.visibility !== 'hidden' && cs.opacity !== '0';
+    return visible || s.classList.contains('open') || s.hasAttribute('open') || s.getAttribute('aria-hidden') === 'false';
+  }
+  function isSearchOpen() {
+    return !!(search && search.classList.contains('open'));
+  }
+  function syncViewerState(){
+    const open = isSheetVisible() || isSearchOpen();
+    html.classList.toggle('viewer-open', open);
+  }
+
+  // Observe DOM/class changes to keep state in sync
+  const mo = new MutationObserver(syncViewerState);
+  mo.observe(document.documentElement, {subtree:true, attributes:true, attributeFilter:['class','style','open','aria-hidden']});
+
+  // Also hook into our search open/close buttons if present
+  document.addEventListener('click', (e)=>{
+    const id = (e.target && e.target.id) || '';
+    if (id === 'search-close-btn') setTimeout(syncViewerState, 0);
+  });
+
+  // Initial sync
+  window.addEventListener('load', syncViewerState);
+  syncViewerState();
+})();
+</script>
+
+
+<script>
+(function(){ 
+  const DEMO_ITEMS = [
+  {
+    "id": 1,
+    "title": "Prada Tote — Vintage Burgundy",
+    "brand": "Prada",
+    "category": "Tote",
+    "material": "Raffia",
+    "color": "Burgundy",
+    "price": 1034,
+    "type": "image",
+    "tags": [
+      "tote",
+      "raffia",
+      "vintage",
+      "burgundy"
+    ]
+  },
+  {
+    "id": 2,
+    "title": "Chanel Shoulder Bag — Classic Navy",
+    "brand": "Chanel",
+    "category": "Shoulder Bag",
+    "material": "Raffia",
+    "color": "Navy",
+    "price": 2538,
+    "type": "image",
+    "tags": [
+      "navy",
+      "raffia",
+      "shoulder bag",
+      "classic"
+    ]
+  },
+  {
+    "id": 3,
+    "title": "Loewe Tote — Vintage Tan",
+    "brand": "Loewe",
+    "category": "Tote",
+    "material": "Leather",
+    "color": "Tan",
+    "price": 1072,
+    "type": "carousel",
+    "tags": [
+      "tote",
+      "leather",
+      "vintage",
+      "tan"
+    ]
+  },
+  {
+    "id": 4,
+    "title": "Fendi Duffel — Vintage Navy",
+    "brand": "Fendi",
+    "category": "Duffel",
+    "material": "Leather",
+    "color": "Navy",
+    "price": 3052,
+    "type": "image",
+    "tags": [
+      "navy",
+      "duffel",
+      "leather",
+      "vintage"
+    ]
+  },
+  {
+    "id": 5,
+    "title": "Fendi Hobo — Structured Sand",
+    "brand": "Fendi",
+    "category": "Hobo",
+    "material": "Canvas",
+    "color": "Sand",
+    "price": 3435,
+    "type": "image",
+    "tags": [
+      "sand",
+      "canvas",
+      "hobo",
+      "structured"
+    ]
+  },
+  {
+    "id": 6,
+    "title": "Hermès Crossbody — Soft Camel",
+    "brand": "Hermès",
+    "category": "Crossbody",
+    "material": "Raffia",
+    "color": "Camel",
+    "price": 1258,
+    "type": "carousel",
+    "tags": [
+      "crossbody",
+      "soft",
+      "raffia",
+      "camel"
+    ]
+  },
+  {
+    "id": 7,
+    "title": "Chanel Backpack — Classic Tan",
+    "brand": "Chanel",
+    "category": "Backpack",
+    "material": "Nylon",
+    "color": "Tan",
+    "price": 1676,
+    "type": "video",
+    "tags": [
+      "nylon",
+      "backpack",
+      "classic",
+      "tan"
+    ]
+  },
+  {
+    "id": 8,
+    "title": "Prada Camera Bag — Structured Stone",
+    "brand": "Prada",
+    "category": "Camera Bag",
+    "material": "Nylon",
+    "color": "Stone",
+    "price": 3425,
+    "type": "image",
+    "tags": [
+      "nylon",
+      "camera bag",
+      "stone",
+      "structured"
+    ]
+  },
+  {
+    "id": 9,
+    "title": "Hermès Satchel — Quilted Tan",
+    "brand": "Hermès",
+    "category": "Satchel",
+    "material": "Quilted Leather",
+    "color": "Tan",
+    "price": 442,
+    "type": "carousel",
+    "tags": [
+      "satchel",
+      "quilted leather",
+      "tan",
+      "quilted"
+    ]
+  },
+  {
+    "id": 10,
+    "title": "Fendi Clutch — Soft Stone",
+    "brand": "Fendi",
+    "category": "Clutch",
+    "material": "Raffia",
+    "color": "Stone",
+    "price": 2484,
+    "type": "image",
+    "tags": [
+      "soft",
+      "stone",
+      "clutch",
+      "raffia"
+    ]
+  },
+  {
+    "id": 11,
+    "title": "Dior Shoulder Bag — Structured Forest",
+    "brand": "Dior",
+    "category": "Shoulder Bag",
+    "material": "Leather",
+    "color": "Forest",
+    "price": 446,
+    "type": "image",
+    "tags": [
+      "shoulder bag",
+      "forest",
+      "leather",
+      "structured"
+    ]
+  },
+  {
+    "id": 12,
+    "title": "Dior Shoulder Bag — Woven Burgundy",
+    "brand": "Dior",
+    "category": "Shoulder Bag",
+    "material": "Suede",
+    "color": "Burgundy",
+    "price": 2723,
+    "type": "carousel",
+    "tags": [
+      "burgundy",
+      "shoulder bag",
+      "woven",
+      "suede"
+    ]
+  },
+  {
+    "id": 13,
+    "title": "Celine Crossbody — Vintage Chocolate",
+    "brand": "Celine",
+    "category": "Crossbody",
+    "material": "Nylon",
+    "color": "Chocolate",
+    "price": 2865,
+    "type": "image",
+    "tags": [
+      "crossbody",
+      "nylon",
+      "chocolate",
+      "vintage"
+    ]
+  },
+  {
+    "id": 14,
+    "title": "Bottega Veneta Shoulder Bag — Vintage Ivory",
+    "brand": "Bottega Veneta",
+    "category": "Shoulder Bag",
+    "material": "Quilted Leather",
+    "color": "Ivory",
+    "price": 789,
+    "type": "video",
+    "tags": [
+      "shoulder bag",
+      "ivory",
+      "quilted leather",
+      "vintage"
+    ]
+  },
+  {
+    "id": 15,
+    "title": "Saint Laurent Hobo — Vintage Navy",
+    "brand": "Saint Laurent",
+    "category": "Hobo",
+    "material": "Nylon",
+    "color": "Navy",
+    "price": 2924,
+    "type": "carousel",
+    "tags": [
+      "navy",
+      "nylon",
+      "vintage",
+      "hobo"
+    ]
+  },
+  {
+    "id": 16,
+    "title": "Celine Tote — Soft Black",
+    "brand": "Celine",
+    "category": "Tote",
+    "material": "Canvas",
+    "color": "Black",
+    "price": 1763,
+    "type": "image",
+    "tags": [
+      "soft",
+      "black",
+      "canvas",
+      "tote"
+    ]
+  },
+  {
+    "id": 17,
+    "title": "Bottega Veneta Shoulder Bag — Soft Stone",
+    "brand": "Bottega Veneta",
+    "category": "Shoulder Bag",
+    "material": "Canvas",
+    "color": "Stone",
+    "price": 990,
+    "type": "image",
+    "tags": [
+      "shoulder bag",
+      "soft",
+      "stone",
+      "canvas"
+    ]
+  },
+  {
+    "id": 18,
+    "title": "Saint Laurent Hobo — Sporty Sand",
+    "brand": "Saint Laurent",
+    "category": "Hobo",
+    "material": "Raffia",
+    "color": "Sand",
+    "price": 1204,
+    "type": "carousel",
+    "tags": [
+      "sporty",
+      "raffia",
+      "hobo",
+      "sand"
+    ]
+  },
+  {
+    "id": 19,
+    "title": "Chanel Backpack — Structured Navy",
+    "brand": "Chanel",
+    "category": "Backpack",
+    "material": "Raffia",
+    "color": "Navy",
+    "price": 3179,
+    "type": "image",
+    "tags": [
+      "navy",
+      "raffia",
+      "backpack",
+      "structured"
+    ]
+  },
+  {
+    "id": 20,
+    "title": "Burberry Hobo — Soft Camel",
+    "brand": "Burberry",
+    "category": "Hobo",
+    "material": "Quilted Leather",
+    "color": "Camel",
+    "price": 1018,
+    "type": "image",
+    "tags": [
+      "soft",
+      "quilted leather",
+      "hobo",
+      "camel"
+    ]
+  },
+  {
+    "id": 21,
+    "title": "Chanel Mini Bag — Minimal Tan",
+    "brand": "Chanel",
+    "category": "Mini Bag",
+    "material": "Suede",
+    "color": "Tan",
+    "price": 569,
+    "type": "video",
+    "tags": [
+      "tan",
+      "mini bag",
+      "minimal",
+      "suede"
+    ]
+  },
+  {
+    "id": 22,
+    "title": "Chanel Crossbody — Classic Camel",
+    "brand": "Chanel",
+    "category": "Crossbody",
+    "material": "Raffia",
+    "color": "Camel",
+    "price": 1696,
+    "type": "image",
+    "tags": [
+      "raffia",
+      "crossbody",
+      "classic",
+      "camel"
+    ]
+  },
+  {
+    "id": 23,
+    "title": "Loewe Duffel — Structured Navy",
+    "brand": "Loewe",
+    "category": "Duffel",
+    "material": "Suede",
+    "color": "Navy",
+    "price": 2386,
+    "type": "image",
+    "tags": [
+      "navy",
+      "suede",
+      "duffel",
+      "structured"
+    ]
+  },
+  {
+    "id": 24,
+    "title": "Hermès Shoulder Bag — Structured Navy",
+    "brand": "Hermès",
+    "category": "Shoulder Bag",
+    "material": "Raffia",
+    "color": "Navy",
+    "price": 3268,
+    "type": "carousel",
+    "tags": [
+      "navy",
+      "raffia",
+      "shoulder bag",
+      "structured"
+    ]
+  },
+  {
+    "id": 25,
+    "title": "Celine Shoulder Bag — Sporty Camel",
+    "brand": "Celine",
+    "category": "Shoulder Bag",
+    "material": "Nylon",
+    "color": "Camel",
+    "price": 1978,
+    "type": "image",
+    "tags": [
+      "shoulder bag",
+      "sporty",
+      "camel",
+      "nylon"
+    ]
+  },
+  {
+    "id": 26,
+    "title": "Hermès Clutch — Classic Ivory",
+    "brand": "Hermès",
+    "category": "Clutch",
+    "material": "Quilted Leather",
+    "color": "Ivory",
+    "price": 2681,
+    "type": "image",
+    "tags": [
+      "ivory",
+      "quilted leather",
+      "clutch",
+      "classic"
+    ]
+  },
+  {
+    "id": 27,
+    "title": "Bottega Veneta Mini Bag — Sporty Forest",
+    "brand": "Bottega Veneta",
+    "category": "Mini Bag",
+    "material": "Quilted Leather",
+    "color": "Forest",
+    "price": 1651,
+    "type": "carousel",
+    "tags": [
+      "sporty",
+      "forest",
+      "quilted leather",
+      "mini bag"
+    ]
+  },
+  {
+    "id": 28,
+    "title": "Chanel Mini Bag — Soft Black",
+    "brand": "Chanel",
+    "category": "Mini Bag",
+    "material": "Quilted Leather",
+    "color": "Black",
+    "price": 2121,
+    "type": "video",
+    "tags": [
+      "soft",
+      "black",
+      "quilted leather",
+      "mini bag"
+    ]
+  },
+  {
+    "id": 29,
+    "title": "Hermès Shoulder Bag — Vintage Burgundy",
+    "brand": "Hermès",
+    "category": "Shoulder Bag",
+    "material": "Nylon",
+    "color": "Burgundy",
+    "price": 357,
+    "type": "image",
+    "tags": [
+      "shoulder bag",
+      "nylon",
+      "vintage",
+      "burgundy"
+    ]
+  },
+  {
+    "id": 30,
+    "title": "Dior Duffel — Woven Tan",
+    "brand": "Dior",
+    "category": "Duffel",
+    "material": "Leather",
+    "color": "Tan",
+    "price": 3462,
+    "type": "carousel",
+    "tags": [
+      "duffel",
+      "leather",
+      "woven",
+      "tan"
+    ]
+  }
+];
+
+  const grid = document.querySelector('.grid') || document.querySelector('[data-role="grid"]') || (function(){
+    const g = document.createElement('section'); g.className='grid'; document.body.appendChild(g); return g;
   })();
-  </script>
 
-  <script>
-  // Build feed grid from DATA
-  (function(){
-    const grid = document.getElementById('grid');
-    function el(tag, cls){ const n=document.createElement(tag); if(cls) n.className=cls; return n; }
+  function createCard(item){
+    const card = document.createElement('article');
+    card.className = 'card';
+    card.dataset.brand = item.brand.toLowerCase();
+    card.dataset.category = item.category.toLowerCase();
+    card.dataset.color = item.color.toLowerCase();
+    card.dataset.material = item.material.toLowerCase();
+    card.dataset.price = String(item.price);
+    card.dataset.tags = (item.tags||[]).join(',');
 
-    function createCard(item){
-      const a = el('article','card');
-      a.dataset.slug = item.slug || '';
-      a.dataset.brand = item.brand || '';
-      a.dataset.category = item.category || '';
-      a.dataset.color = item.color || '';
-      a.dataset.material = item.material || '';
-      a.dataset.price = item.price != null ? String(item.price) : '';
-      a.dataset.tags = (item.tags||[]).join(',');
-
-      const media = el('div','media');
+    const media = document.createElement('div'); media.className = 'media';
+    if (item.type === 'carousel') {
+      media.setAttribute('data-carousel','1');
+      for (let k=0;k<3;k++) {
+        const img = new Image();
+        img.src = 'https://picsum.photos/seed/handbag-' + item.id + '-' + (k+1) + '/1200/1200';
+        img.alt = item.title + ' photo ' + (k+1);
+        img.loading = 'lazy'; img.decoding = 'async';
+        media.appendChild(img);
+      }
+    } else if (item.type === 'video') {
+      const v = document.createElement('video');
+      v.setAttribute('muted',''); v.setAttribute('playsinline',''); v.setAttribute('loop','');
+      v.autoplay = true; v.controls = false;
+      v.poster = 'https://picsum.photos/seed/poster-' + item.id + '/1200/1200';
+      v.src = ''; 
+      media.appendChild(v);
+    } else {
       const img = new Image();
-      img.decoding='async'; img.loading='lazy';
-      img.src = (item.images && item.images[0] && item.images[0].url) ? item.images[0].url : '';
-      img.alt = (item.images && item.images[0] && item.images[0].alt) ? item.images[0].alt : (item.title||'Image');
-      img.onerror = ()=>{ img.onerror=null; img.src='data:image/svg+xml;utf8,'+encodeURIComponent('<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 400 500\"><rect width=\"400\" height=\"500\" fill=\"#111\"/><text x=\"200\" y=\"260\" text-anchor=\"middle\" fill=\"#666\" font-family=\"system-ui\" font-size=\"24\">Image</text></svg>'); };
+      img.src = 'https://picsum.photos/seed/img-' + item.id + '/1200/1200';
+      img.alt = item.title; img.loading = 'lazy'; img.decoding = 'async';
       media.appendChild(img);
-
-      // NEW badge
-      const hasNew = (a.dataset.tags||'').toLowerCase().includes('new');
-      if (hasNew){ const b=el('span','badge-new'); b.textContent='NEW'; media.appendChild(b); }
-
-      a.appendChild(media);
-
-      const meta = el('div','meta');
-      const stack = el('div','stack');
-      const t = el('div','title'); t.textContent = item.title || 'Item';
-      const s = el('div','sub'); s.textContent = [item.brand,item.category,item.color,item.material].filter(Boolean).join(' • ');
-      stack.appendChild(t); stack.appendChild(s);
-      const p = el('div','price'); p.textContent = item.price!=null ? ('$'+item.price) : '';
-      meta.appendChild(stack); meta.appendChild(p);
-      a.appendChild(meta);
-
-      a.addEventListener('click', ()=> openViewer(item));
-      return a;
     }
+    card.appendChild(media);
 
-    window.buildGrid = function(items){
-      grid.innerHTML='';
-      (items||[]).forEach(it=> grid.appendChild(createCard(it)));
+    const meta = document.createElement('div'); meta.className = 'meta';
+    meta.innerHTML = ''
+      + '<div class="title">' + item.title + '</div>'
+      + '<div class="sub">' + item.brand + ' • ' + item.category + ' • ' + item.color + ' • ' + item.material + ' • $' + item.price + '</div>'
+      + '<div class="tags">' + (item.tags||[]).map(t => '<span class="chip">#'+t+'</span>').join(' ') + '</div>';
+    card.appendChild(meta);
+    return card;
+  }
+
+  function rebuildGrid(data){
+    grid.innerHTML='';
+    data.forEach(it => grid.appendChild(createCard(it)));
+    if (typeof detectFlags === 'function') detectFlags();
+    _cards = Array.from(document.querySelectorAll('.card'));
+  }
+
+  let _cards = [];
+  rebuildGrid(DEMO_ITEMS);
+
+  const overlay = document.getElementById('search-overlay');
+  const openBtn = document.querySelector('.search-btn');
+  const inputNew = document.getElementById('global-search-input');
+  const closeBtn = document.getElementById('search-close-btn');
+  const countEl = document.getElementById('search-count');
+
+  function openSearch(e){ if(e){e.stopImmediatePropagation(); e.preventDefault();} overlay.classList.add('open'); overlay.setAttribute('aria-hidden','false'); setTimeout(()=>inputNew && inputNew.focus(), 30); }
+  function closeSearch(e){ if(e){e.stopImmediatePropagation(); e.preventDefault();} overlay.classList.remove('open'); overlay.setAttribute('aria-hidden','true'); inputNew && (inputNew.value=''); filter(''); }
+
+  function textFor(card){
+    const ds = card.dataset;
+    return (card.innerText + ' ' + (ds.brand||'') + ' ' + (ds.category||'') + ' ' + (ds.color||'') + ' ' + (ds.material||'') + ' ' + (ds.tags||'')).toLowerCase();
+  }
+
+  function filter(q){
+    const query = (q||'').trim().toLowerCase();
+    let hits = 0;
+    _cards.forEach(c => {
+      const match = !query || textFor(c).includes(query);
+      c.classList.toggle('is-filtered-out', !match);
+      if (match) hits++;
+    });
+    if (countEl) countEl.textContent = hits;
+  }
+
+  if (openBtn) openBtn.addEventListener('click', openSearch, true);
+  if (closeBtn) closeBtn.addEventListener('click', closeSearch, true);
+  window.addEventListener('keydown', (e)=>{
+    if (e.key === '/' && !e.metaKey && !e.ctrlKey && !e.altKey){ openSearch(e); }
+    else if (e.key === 'Escape'){ closeSearch(e); }
+  }, true);
+
+  if (inputNew){
+    inputNew.addEventListener('input', (e)=> filter(e.target.value));
+    inputNew.addEventListener('keydown', (e)=>{ if (e.key==='Enter'){ const first = _cards.find(c=>!c.classList.contains('is-filtered-out')); if(first) first.scrollIntoView({behavior:'smooth',block:'start'}); } });
+  }
+})(); 
+</script>
+
+
+<script>
+(function(){
+  const overlay = document.getElementById('search-overlay');
+  const openBtn = document.querySelector('.search-btn');
+  const input = document.getElementById('global-search-input');
+  const closeBtn = document.getElementById('search-close-btn');
+  const clearBtn = document.getElementById('search-clear-btn');
+  const countEl = document.getElementById('search-count');
+  const list = document.getElementById('search-list');
+  const hint = document.getElementById('search-results-hint');
+  let _cards = Array.from(document.querySelectorAll('.card'));
+  let activeIndex = -1;
+  let lastFocus = null;
+
+  // Build sticky subbar with count + sort (visual only)
+  let subbar = overlay.querySelector('.search-subbar');
+  if (!subbar){
+    subbar = document.createElement('div');
+    subbar.className = 'search-subbar';
+    subbar.innerHTML = '<div class="search-meta" id="search-meta">Showing all items</div>';
+    overlay.querySelector('.search-panel')?.insertBefore(subbar, list);
+  }
+  const metaLine = document.getElementById('search-meta');
+
+  const mo = new MutationObserver(()=>{ _cards = Array.from(document.querySelectorAll('.card')); });
+  mo.observe(document.body, {childList:true, subtree:true});
+
+  function words(q){ return (q||'').toLowerCase().trim().split(/\s+/).filter(Boolean); }
+
+  function scoreCard(card, terms){
+    if (!terms.length) return 1; // neutral baseline
+    const ds = card.dataset || {};
+    const fields = {
+      brand: (ds.brand||'').toLowerCase(),
+      category: (ds.category||'').toLowerCase(),
+      color: (ds.color||'').toLowerCase(),
+      material: (ds.material||'').toLowerCase(),
+      tags: (ds.tags||'').toLowerCase(),
+      text: (card.innerText||'').toLowerCase()
+    };
+    let score = 0;
+    const weights = { brand:5, category:4, color:3, material:3, tags:2, text:1 };
+    terms.forEach(t=>{
+      for (const k in fields){
+        if (fields[k].includes(t)) score += weights[k];
+      }
+    });
+    return score;
+  }
+
+  function highlight(text, terms){
+    if (!terms.length || !text) return text;
+    let out = text;
+    terms.forEach(t=>{
+      const re = new RegExp('('+t.replace(/[.*+?^${}()|[\\]\\\\]/g,'\\\\$&')+')','ig');
+      out = out.replace(re,'<mark class="hl">$1</mark>');
+    });
+    return out;
+  }
+
+  function emptyState(){
+    list.innerHTML = '';
+    const wrap = document.createElement('div');
+    wrap.className = 'search-empty';
+    wrap.innerHTML = '<div>No matches.</div>';
+    const sugs = document.createElement('div');
+    sugs.className = 'sugs';
+    const ideas = ['black tote','nylon','mini bag','ivory','suede','crossbody'];
+    ideas.forEach(txt=>{
+      const a = document.createElement('a');
+      a.href = '#'; a.innerHTML = '<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001l3.85 3.85a1 1 0 0 0 1.415-1.415l-3.867-3.833zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"/></svg>' + txt;
+      a.addEventListener('click', (e)=>{ e.preventDefault(); input.value = txt; filterGrid(txt); input.focus(); });
+      sugs.appendChild(a);
+    });
+    wrap.appendChild(sugs);
+    list.appendChild(wrap);
+  }
+
+  function cardThumb(c){
+    const img = c.querySelector('.media img');
+    if (img && img.src) return img.src;
+    const poster = c.querySelector('video')?.poster;
+    return poster || '';
+  }
+
+  function goToCard(c){
+    closeSearch();
+    c.classList.remove('glow');
+    c.scrollIntoView({behavior:'smooth',block:'center'});
+    setTimeout(()=>c.classList.add('glow'), 80);
+  }
+
+  function renderList(matches, terms){
+    list.innerHTML = '';
+    if (!matches.length){ emptyState(); return; }
+    list.setAttribute('role','listbox');
+    matches.slice(0, 60).forEach((c, i)=>{
+      const row = document.createElement('div');
+      row.className = 'search-item';
+      row.setAttribute('role','option');
+      row.setAttribute('data-index', String(i));
+      row.tabIndex = -1;
+      const title = c.querySelector('.title')?.textContent || 'Item';
+      const sub = [c.dataset.brand, c.dataset.category, c.dataset.color, c.dataset.material].filter(Boolean).join(' • ');
+      row.innerHTML = ''
+        + '<img class="search-thumb" src="'+ cardThumb(c) +'" alt="" />'
+        + '<div>'
+        +   '<div class="search-title">' + highlight(title, terms) + '</div>'
+        +   '<div class="search-sub">' + highlight(sub, terms) + '</div>'
+        + '</div>'
+        + '<div class="search-price">' + (c.dataset.price ? ('$'+c.dataset.price) : '') + '</div>';
+      row.addEventListener('click', ()=> goToCard(c));
+      list.appendChild(row);
+      // Staggered reveal
+      setTimeout(()=> row.classList.add('show'), 20 + i*20);
+    });
+    activeIndex = matches.length ? 0 : -1;
+    updateActive();
+  }
+
+  function updateActive(){
+    const items = Array.from(list.querySelectorAll('.search-item'));
+    items.forEach((it, i)=>{
+      const sel = i === activeIndex;
+      it.setAttribute('aria-selected', sel ? 'true':'false');
+      it.classList.toggle('is-active', sel);
+      if (sel) it.scrollIntoView({block:'nearest'});
+    });
+  }
+
+  function filterGrid(q){
+    const terms = words(q);
+    let scored = [];
+    _cards.forEach(c => {
+      const s = scoreCard(c, terms);
+      const match = terms.length === 0 || s > 0;
+      c.classList.toggle('is-filtered-out', !match);
+      if (match) scored.push({c, s});
+    });
+    // Visual-only sort dropdown (for now it doesn't change ranking except for brand A–Z)
+    scored.sort((a,b)=> b.s - a.s);
+    const matches = scored.map(x=>x.c);
+    countEl && (countEl.textContent = matches.length);
+    if (metaLine){
+      metaLine.innerHTML = terms.length ? ('Showing <strong>'+matches.length+'</strong> results for ‘<strong>'+q+'</strong>’') : ('Showing <strong>'+matches.length+'</strong> results');
+    }
+    if (hint){
+      hint.textContent = terms.length ? ('Showing ' + matches.length + ' results for "' + q + '"') : ('Showing all items');
+    }
+    renderList(matches, terms);
+  }
+
+  function openSearch(e){
+    if (e) { e.preventDefault(); e.stopImmediatePropagation(); }
+    lastFocus = document.activeElement;
+    overlay.classList.add('open'); overlay.setAttribute('aria-hidden','false');
+    filterGrid(input ? input.value : '');
+    setTimeout(()=> input && input.focus(), 30);
+    trapFocus(true);
+  }
+  function closeSearch(e){
+    if (e) { e.preventDefault(); e.stopImmediatePropagation(); }
+    overlay.classList.remove('open'); overlay.setAttribute('aria-hidden','true');
+    trapFocus(false);
+    setTimeout(()=>{ if (lastFocus && lastFocus.focus) lastFocus.focus(); }, 50);
+  }
+
+  function onKey(e){
+    if (overlay.getAttribute('aria-hidden') === 'true') return;
+    const items = Array.from(list.querySelectorAll('.search-item'));
+    if (e.key === 'ArrowDown'){ e.preventDefault(); if (items.length){ activeIndex = Math.min(items.length-1, activeIndex+1); updateActive(); } }
+    else if (e.key === 'ArrowUp'){ e.preventDefault(); if (items.length){ activeIndex = Math.max(0, activeIndex-1); updateActive(); } }
+    else if (e.key === 'Enter'){ if (items.length && activeIndex>=0){ items[activeIndex].click(); } }
+    else if (e.key === 'Escape'){ closeSearch(e); }
+  }
+
+  // Focus trap inside panel
+  function trapFocus(enable){
+    const panel = overlay.querySelector('.search-panel');
+    if (!panel) return;
+    if (!enable) { overlay.onkeydown = null; return; }
+    overlay.onkeydown = (e)=>{
+      if (e.key !== 'Tab') return;
+      const focusables = panel.querySelectorAll('button, [href], input, select, [tabindex]:not([tabindex="-1"])');
+      if (!focusables.length) return;
+      const first = focusables[0], last = focusables[focusables.length - 1];
+      if (e.shiftKey && document.activeElement === first){ e.preventDefault(); last.focus(); }
+      else if (!e.shiftKey && document.activeElement === last){ e.preventDefault(); first.focus(); }
+    };
+  }
+
+  // Wire up
+  openBtn && openBtn.addEventListener('click', openSearch, true);
+  closeBtn && closeBtn.addEventListener('click', closeSearch, true);
+  window.addEventListener('keydown', (e)=>{ if (e.key === '/' && !e.metaKey && !e.ctrlKey && !e.altKey) openSearch(e); }, true);
+  window.addEventListener('keydown', onKey, true);
+  input && input.addEventListener('input', (e)=> filterGrid(e.target.value));
+  clearBtn && clearBtn.addEventListener('click', (e)=>{ e.preventDefault(); e.stopImmediatePropagation(); input && (input.value=''); filterGrid(''); closeSearch(); });
+  // Init
+  window.addEventListener('load', ()=>{ countEl && (countEl.textContent = document.querySelectorAll('.card').length); });
+})();
+</script>
+<!-- WhatsApp CTAs appear only when viewer is open --><script>
+(function(){
+  // --- Clear search
+  const input = document.getElementById('global-search-input');
+  const clearBtn = document.getElementById('search-clear-btn');
+  const countEl = document.getElementById('search-count');
+  function clearSearch(){
+    if (input) input.value = '';
+    // show all cards
+    document.querySelectorAll('.card').forEach(c => c.classList.remove('is-filtered-out'));
+    if (countEl) countEl.textContent = document.querySelectorAll('.card').length;
+    const hint = document.getElementById('search-results-hint');
+    if (hint) hint.textContent = 'Showing all items';
+  }
+  clearBtn && clearBtn.addEventListener('click', (e)=>{ e.preventDefault(); e.stopPropagation(); clearSearch(); });
+
+  // --- Make logo clickable: go "home" (reset filters/search and scroll top)
+  const logo = document.querySelector('header img.logo, header .logo img, header .brand img, header .brand svg, header svg.logo');
+  function goHome(e){
+    if (e) { e.preventDefault(); e.stopPropagation(); }
+    // close overlays if open
+    const overlay = document.getElementById('search-overlay');
+    overlay && overlay.classList.remove('open');
+    overlay && overlay.setAttribute('aria-hidden','true');
+    // reset search
+    clearSearch();
+    // scroll to top
+    window.scrollTo({top:0, behavior:'smooth'});
+  }
+  logo && logo.addEventListener('click', goHome);
+
+  // --- Toggle html.sheet-open when a quick-view (.sheet) is visible
+  const root = document.documentElement;
+  function isSheetVisible(){
+    const s = document.querySelector('.sheet');
+    if (!s) return false;
+    const cs = getComputedStyle(s);
+    const visible = cs.display !== 'none' && cs.visibility !== 'hidden' && cs.opacity !== '0';
+    return visible || s.classList.contains('open') || s.hasAttribute('open') || s.getAttribute('aria-hidden') === 'false';
+  }
+  const toggleSheetClass = () => {
+    root.classList.toggle('sheet-open', isSheetVisible());
+  };
+  const mo = new MutationObserver(toggleSheetClass);
+  mo.observe(document.documentElement, {subtree:true, attributes:true, attributeFilter:['class','style','open','aria-hidden']});
+  window.addEventListener('load', toggleSheetClass);
+  toggleSheetClass();
+})();
+</script>
+
+
+<script>
+(function(){
+  const overlay = document.getElementById('search-overlay');
+  const input = document.getElementById('global-search-input');
+  const clearBtn = document.getElementById('search-clear-btn');
+  const countEl = document.getElementById('search-count');
+  const hintEl = document.getElementById('search-results-hint');
+
+  function showAllAndClose(){
+    // Clear input
+    if (input) input.value = '';
+    // Reveal all cards
+    const cards = document.querySelectorAll('.card');
+    cards.forEach(c => c.classList.remove('is-filtered-out'));
+    // Update UI counts/hints
+    if (countEl) countEl.textContent = String(cards.length);
+    if (hintEl) hintEl.textContent = 'Showing all items';
+    // Close overlay
+    if (overlay){
+      overlay.classList.remove('open');
+      overlay.setAttribute('aria-hidden','true');
+    }
+  }
+
+  if (clearBtn){
+    clearBtn.addEventListener('click', (e)=>{
+      e.preventDefault();
+      e.stopImmediatePropagation();
+      showAllAndClose();
+    }, true);
+  }
+})();
+</script>
+
+
+<script>
+(function(){
+  const root = document.documentElement;
+
+  function visible(el){
+    if (!el) return false;
+    const cs = getComputedStyle(el);
+    return cs.display !== 'none' && cs.visibility !== 'hidden' && cs.opacity !== '0';
+  }
+
+  function isViewerOpen(){
+    const overlay = document.querySelector('.overlay');
+    const sheet = document.querySelector('.sheet');
+    // common conventions: class "open", aria-hidden="false", or visible style
+    const overlayOpen = overlay && (overlay.classList.contains('open') || overlay.getAttribute('aria-hidden') === 'false' || visible(overlay));
+    const sheetOpen = sheet && (sheet.classList.contains('open') || sheet.getAttribute('aria-hidden') === 'false' || visible(sheet));
+    return !!(overlayOpen || sheetOpen);
+  }
+
+  function sync(){
+    root.classList.toggle('viewer-open', isViewerOpen());
+  }
+
+  // Observe changes to overlay/sheet nodes
+  const mo = new MutationObserver(sync);
+  mo.observe(document.documentElement, {subtree:true, childList:true, attributes:true, attributeFilter:['class','style','open','aria-hidden']});
+
+  // Heuristic: when a media tile is clicked, viewer will open soon
+  document.addEventListener('click', (e)=>{
+    const media = e.target.closest && e.target.closest('.media');
+    if (media){ setTimeout(sync, 60); setTimeout(sync, 250); }
+  }, true);
+
+  // Heuristic: Esc likely closes viewer
+  window.addEventListener('keydown', (e)=>{
+    if (e.key === 'Escape'){ setTimeout(sync, 60); setTimeout(sync, 200); }
+  }, true);
+
+  // Initial sync
+  window.addEventListener('load', sync);
+  sync();
+})();
+</script>
+
+
+
+
+
+    <a id="style-request-btn" href="https://wa.me/?text=Hi%2C%20I%27d%20like%20to%20request%20a%20specific%20style" target="_blank" rel="noopener" aria-label="Style request via WhatsApp">
+      <svg viewBox="0 0 32 32" aria-hidden="true"><path d="M19.11 17.16c-.31-.15-1.84-.9-2.12-1.01-.28-.1-.49-.15-.69.15-.2.31-.79 1-.97 1.21-.18.2-.36.23-.67.08-.31-.15-1.3-.48-2.47-1.53-.91-.81-1.52-1.81-1.7-2.12-.18-.31-.02-.48.13-.63.13-.13.31-.36.46-.54.15-.18.2-.31.31-.51.1-.21.05-.38-.03-.54-.08-.15-.69-1.66-.94-2.27-.25-.6-.5-.52-.69-.53l-.59-.01c-.2 0-.52.07-.79.38-.27.31-1.04 1.02-1.04 2.49s1.07 2.88 1.22 3.08c.15.2 2.1 3.2 5.08 4.49.71.31 1.27.49 1.7.63.71.23 1.36.2 1.87.12.57-.08 1.84-.75 2.1-1.47.26-.72.26-1.33.18-1.47-.08-.15-.28-.23-.59-.38z"/><path d="M16.01 3.2C9.53 3.2 4.28 8.45 4.28 14.93c0 2.05.55 3.98 1.52 5.64l-1 3.67 3.76-.99c1.62.89 3.48 1.4 5.45 1.4 6.48 0 11.73-5.25 11.73-11.73S22.49 3.2 16.01 3.2zm0 21.04c-1.88 0-3.64-.55-5.11-1.5l-.36-.23-2.23.58.6-2.17-.24-.35a9.63 9.63 0 01-1.49-5.34c0-5.33 4.33-9.66 9.66-9.66 5.33 0 9.66 4.33 9.66 9.66 0 5.33-4.33 9.66-9.66 9.66z"/></svg>
+      <span>Style request</span>
+    </a>
+    
+
+<script>
+(function(){
+  const btn = document.getElementById('style-request-btn');
+  if (!btn) return;
+  function visible(el){
+    if (!el) return false;
+    const cs = getComputedStyle(el);
+    return cs.display !== 'none' && cs.visibility !== 'hidden' && cs.opacity !== '0';
+  }
+  function isViewerOpen(){
+    const o = document.querySelector('.overlay');
+    const s = document.querySelector('.sheet');
+    return (o && (o.classList.contains('open') || o.getAttribute('aria-hidden')==='false' || visible(o)))
+        || (s && (s.classList.contains('open') || s.getAttribute('aria-hidden')==='false' || visible(s)));
+  }
+  function sync(){
+    btn.style.display = isViewerOpen() ? 'none' : 'inline-flex';
+  }
+  const mo = new MutationObserver(sync);
+  mo.observe(document.documentElement, {subtree:true, childList:true, attributes:true, attributeFilter:['class','style','open','aria-hidden']});
+  document.addEventListener('click', (e)=>{
+    if (e.target.closest && e.target.closest('.media')){
+      setTimeout(sync, 80); setTimeout(sync, 250);
+    }
+  }, true);
+  window.addEventListener('keydown', (e)=>{ if (e.key==='Escape'){ setTimeout(sync,80); setTimeout(sync,250); }}, true);
+  window.addEventListener('load', sync);
+  sync();
+})();
+</script>
+
+
+<script>
+(function(){
+  function onKey(e){
+    const sheet = document.querySelector('.sheet');
+    if (!sheet || sheet.getAttribute('aria-hidden') === 'true') return;
+    if (e.key === 'ArrowLeft' || e.key === 'ArrowRight'){
+      const scrollers = sheet.querySelectorAll('.slides, [data-carousel], .media[data-carousel]');
+      scrollers.forEach(sc => {
+        sc.setAttribute('aria-roledescription','carousel');
+        sc.setAttribute('aria-label','Product media carousel');
+        const dx = e.key === 'ArrowLeft' ? -1 : 1;
+        if (sc.scrollBy) sc.scrollBy({left: dx * (sc.clientWidth || 600), behavior:'smooth'});
+      });
+    }
+  }
+  window.addEventListener('keydown', onKey, true);
+})();
+</script>
+
+
+<script>
+(function(){
+  const CSEL = '.media[data-carousel], .slides';
+  const carousels = () => Array.from(document.querySelectorAll(CSEL));
+  function attach(el){
+    if (el.__swipeInstalled) return;
+    el.__swipeInstalled = true;
+    let startX=0, startT=0, lastX=0;
+    el.addEventListener('touchstart', (e)=>{
+      const t = e.changedTouches[0];
+      startX = lastX = t.clientX;
+      startT = Date.now();
+    }, {passive:true});
+    el.addEventListener('touchmove', (e)=>{
+      const t = e.changedTouches[0];
+      lastX = t.clientX;
+    }, {passive:true});
+    el.addEventListener('touchend', (e)=>{
+      const dx = lastX - startX;
+      const dt = (Date.now() - startT) || 1;
+      const vx = Math.abs(dx) / dt; // px per ms
+      const width = el.clientWidth || 1;
+      const threshold = Math.min(0.22 * width, 160);
+      const fast = vx > 0.6; // quick flick
+      let dir = 0;
+      if (dx < -threshold || (dx < -24 && fast)) dir = 1;     // next
+      if (dx > threshold  || (dx > 24  && fast)) dir = -1;    // prev
+      const idx = Math.round((el.scrollLeft || 0) / width);
+      const target = Math.max(0, Math.min(idx + dir, Math.ceil((el.scrollWidth - width)/width)));
+      if (dir !== 0) el.scrollTo({left: target * width, behavior: 'smooth'});
+    }, {passive:true});
+  }
+  function install(){ carousels().forEach(attach); }
+  const mo = new MutationObserver(install);
+  mo.observe(document.body, {subtree:true, childList:true});
+  window.addEventListener('load', install);
+  install();
+})();
+</script>
+
+
+<a id="wa-quote" href="https://wa.me/?text=Hi%2C%20I%27d%20like%20a%20quote%20for%20this%20item" target="_blank" rel="noopener" aria-label="Request quote on WhatsApp">
+  <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2a10 10 0 0 0-8.94 14.5L2 22l5.67-1.47A10 10 0 1 0 12 2zm0 18a8 8 0 0 1-4.06-1.1l-.28-.16-3.03.78.82-2.94-.17-.27A8 8 0 1 1 12 20zm4.18-6.36c-.2-.12-1.23-.72-1.42-.8-.19-.08-.33-.12-.46.12-.13.24-.53.87-.65 1.05-.12.18-.24.2-.45.1-.2-.1-.86-.32-1.63-.98-.6-.52-1-1.14-1.12-1.32-.12-.18-.01-.29.1-.41.1-.11.23-.29.34-.43.11-.14.15-.24.22-.4.07-.16.03-.29-.02-.41-.05-.12-.47-1.2-.64-1.65-.17-.45-.36-.39-.5-.4l-.44-.01c-.15 0-.39.05-.59.27-.2.22-.78.76-.78 1.86s.79 2.16.9 2.31c.11.14 1.55 2.38 3.77 3.36.53.23.95.37 1.27.47.53.17 1 .14 1.37.09.42-.06 1.37-.56 1.56-1.08.2-.52.2-.97.13-1.08-.06-.11-.21-.17-.46-.29z" fill="currentColor"/></svg>
+  <span>Request quote</span>
+</a>
+
+
+<script>
+(function(){
+  function visible(el){
+    if (!el) return false;
+    const cs = getComputedStyle(el);
+    return cs.display !== 'none' && cs.visibility !== 'hidden' && cs.opacity !== '0';
+  }
+  function isOpen(){
+    const o = document.querySelector('.overlay');
+    const s = document.querySelector('.sheet');
+    const openV = (o && (o.classList.contains('open') || o.getAttribute('aria-hidden')==='false' || visible(o)))
+               || (s && (s.classList.contains('open') || s.getAttribute('aria-hidden')==='false' || visible(s)));
+    return !!openV;
+  }
+  function sync(){
+    document.documentElement.classList.toggle('viewer-open', isOpen());
+  }
+  const mo = new MutationObserver(sync);
+  mo.observe(document.documentElement, {subtree:true, attributes:true, attributeFilter:['class','style','open','aria-hidden']});
+  document.addEventListener('click', (e)=>{
+    if (e.target.closest && e.target.closest('.media, .card')){
+      setTimeout(sync, 60); setTimeout(sync, 240);
+    }
+  }, true);
+  window.addEventListener('keydown', (e)=>{ if (e.key==='Escape'){ setTimeout(sync,60); setTimeout(sync,220);} }, true);
+  window.addEventListener('load', sync);
+  sync();
+})();
+</script>
+
+
+<script>
+(function(){
+  function removeViewOriginal(){
+    document.querySelectorAll('a,button').forEach(el=>{
+      const t = (el.textContent||'').trim().toLowerCase();
+      if (t === 'view original' || t === 'view original' || t.includes('view original')){
+        el.remove();
+      }
+    });
+  }
+  new MutationObserver(removeViewOriginal).observe(document.body, {subtree:true, childList:true});
+  window.addEventListener('load', removeViewOriginal);
+  removeViewOriginal();
+})();
+</script>
+
+
+<script>
+(function(){
+  function removeViewerFooters(){
+    document.querySelectorAll('.sheet .footer, .overlay .footer').forEach(el => el.remove());
+  }
+  // Remove immediately, on load, and when new nodes are added
+  removeViewerFooters();
+  window.addEventListener('load', removeViewerFooters);
+  new MutationObserver(removeViewerFooters).observe(document.documentElement, {subtree:true, childList:true});
+})();
+</script>
+
+
+<script>
+(function(){
+  function syncHeaderHeight(){
+    const h = document.querySelector('header');
+    if (!h) return;
+    const px = h.getBoundingClientRect().height || 64;
+    document.documentElement.style.setProperty('--header-h', Math.round(px) + 'px');
+  }
+  window.addEventListener('load', syncHeaderHeight);
+  window.addEventListener('resize', ()=>{ requestAnimationFrame(syncHeaderHeight); });
+  setTimeout(syncHeaderHeight, 50);
+})();
+</script>
+
+
+<script>
+(function(){
+  const PH = "data:image/svg+xml;base64,PHN2ZyB4bWxucz0naHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmcnIHZpZXdCb3g9JzAgMCA0MDAgNTAwJyBwcmVzZXJ2ZUFzcGVjdFJhdGlvPSd4TWlkWU1pZCBzbGljZSc+CiAgPGRlZnM+PGxpbmVhckdyYWRpZW50IGlkPSdnJyB4MT0nMCcgeDI9JzEnIHkxPScwJyB5Mj0nMSc+CiAgICA8c3RvcCBvZmZzZXQ9JzAnIHN0b3AtY29sb3I9JyMxMTEnLz48c3RvcCBvZmZzZXQ9JzEnIHN0b3AtY29sb3I9JyMxYTFhMWEnLz48L2xpbmVhckdyYWRpZW50PjwvZGVmcz4KICA8cmVjdCB3aWR0aD0nNDAwJyBoZWlnaHQ9JzUwMCcgZmlsbD0ndXJsKCNnKScvPgogIDxyZWN0IHg9JzEwJyB5PScxMCcgd2lkdGg9JzM4MCcgaGVpZ2h0PSc0ODAnIGZpbGw9J25vbmUnIHN0cm9rZT0nIzJhMmEyYScgc3Ryb2tlLXdpZHRoPScyJyBzdHJva2UtZGFzaGFycmF5PSc2IDgnLz4KICA8ZyBmaWxsPScjNGE0YTRhJz48Y2lyY2xlIGN4PScxMjAnIGN5PScxODAnIHI9JzQyJy8+PHBhdGggZD0nTTYwIDQxMGgyODBMMjcwIDMwMGwtNzAgNzUtMzUtNDV6Jy8+PC9nPgogIDx0ZXh0IHg9JzIwMCcgeT0nMjYwJyB0ZXh0LWFuY2hvcj0nbWlkZGxlJyBmb250LWZhbWlseT0nc3lzdGVtLXVpLC1hcHBsZS1zeXN0ZW0sU2Vnb2UgVUksUm9ib3RvLEhlbHZldGljYSxBcmlhbCcgZm9udC1zaXplPScyOCcgZmlsbD0nIzZlNmU2ZSc+SW1hZ2U8L3RleHQ+Cjwvc3ZnPg==";
+  function setFallback(img){
+    if (!img) return;
+    img.onerror = null; // prevent loop
+    img.removeAttribute('srcset');
+    img.removeAttribute('sizes');
+    img.loading = 'lazy';
+    img.decoding = 'async';
+    img.src = PH;
+  }
+  // Attach onerror to all imgs
+  function wire(){
+    document.querySelectorAll('img').forEach(img=>{
+      if (!img.__wired){
+        img.__wired = true;
+        img.addEventListener('error', ()=> setFallback(img), {passive:true});
+      }
+      // If already broken or zero size, set fallback after first paint
+      if (!img.complete || img.naturalWidth === 0){
+        setTimeout(()=>{ if (!img.complete || img.naturalWidth === 0) setFallback(img); }, 400);
+      }
+    });
+  }
+  new MutationObserver(wire).observe(document.body, {subtree:true, childList:true});
+  window.addEventListener('load', wire);
+  wire();
+})();
+</script>
+
+
+<script>
+(function(){
+  const SEL = '.media[data-carousel], .slides';
+  function install(el){
+    if (!el || el.__iosSwipe) return;
+    el.__iosSwipe = true;
+    let sx=0, lx=0, st=0;
+    el.addEventListener('touchstart', (e)=>{ const t=e.changedTouches[0]; sx=lx=t.clientX; st=Date.now(); }, {passive:true});
+    el.addEventListener('touchmove', (e)=>{ lx=e.changedTouches[0].clientX; }, {passive:true});
+    el.addEventListener('touchend', ()=>{
+      const dx = lx - sx, dt = Math.max(1, Date.now()-st), w = el.clientWidth||1;
+      const fast = Math.abs(dx)/dt > .6, thr = Math.min(.22*w, 160);
+      let dir = 0;
+      if (dx < -thr || (dx < -24 && fast)) dir = 1;
+      if (dx >  thr || (dx >  24 && fast)) dir = -1;
+      if (dir){
+        const idx = Math.round((el.scrollLeft||0)/w);
+        const target = Math.max(0, Math.min(idx+dir, Math.ceil((el.scrollWidth-w)/w)));
+        el.scrollTo({left: target*w, behavior:'smooth'});
+      }
+    }, {passive:true});
+  }
+  function wire(){ document.querySelectorAll(SEL).forEach(install); }
+  new MutationObserver(wire).observe(document.body, {subtree:true, childList:true});
+  window.addEventListener('load', wire);
+  wire();
+})();
+</script>
+
+
+<script>
+(function(){
+  // 3a) Attach NEW badge based on tags/chips
+  function attachNewBadges(){
+    document.querySelectorAll('.card').forEach(card => {
+      const ds = card.dataset || {};
+      const tagStr = (ds.tags||'').toLowerCase();
+      const chipHasNew = !!Array.from(card.querySelectorAll('.chip')).find(x => (x.textContent||'').trim().toLowerCase() === 'new');
+      if (tagStr.includes('new') || chipHasNew){
+        const media = card.querySelector('.media');
+        if (media && !media.querySelector('.badge-new')){
+          const b = document.createElement('span');
+          b.className = 'badge-new';
+          b.textContent = 'NEW';
+          media.appendChild(b);
+        }
+      }
+    });
+  }
+
+  // 3b) Carousel indexing: show numeric "i / N" and update active dot
+  function nearestIndex(el){
+    const w = el.clientWidth || 1;
+    return Math.round((el.scrollLeft || 0) / w);
+  }
+  function installCarousel(el){
+    if (!el || el.__hasIndexing) return;
+    el.__hasIndexing = true;
+
+    // Build numeric indicator
+    const parent = el.closest('.frame') || el.closest('.media') || el;
+    let ind = parent.querySelector('.slide-indicator');
+    if (!ind){
+      ind = document.createElement('div');
+      ind.className = 'slide-indicator';
+      ind.setAttribute('aria-live','polite');
+      parent.appendChild(ind);
+    }
+    // Prefer blend for media
+    if (parent.classList.contains('media')) ind.classList.add('use-blend');
+
+    const update = () => {
+      const children = el.children;
+      const n = children.length || 1;
+      const i = Math.max(0, Math.min(nearestIndex(el), n-1));
+      ind.textContent = (i+1) + ' / ' + n;
+
+      // Update dots if present
+      const dots = parent.querySelectorAll('.dots .dot');
+      if (dots && dots.length){
+        dots.forEach((d, di) => d.classList.toggle('is-active', di === i));
+        // also set aria-current
+        dots.forEach((d, di) => d.setAttribute('aria-current', di === i ? 'true' : 'false'));
+      }
     };
 
-    // Viewer
-    const overlay = document.getElementById('overlay');
-    const viewer = document.getElementById('viewer');
-    const slides = document.getElementById('slides');
-    const dots = document.getElementById('dots');
-    const indicator = document.getElementById('slideIndicator');
+    // Throttled scroll handler
+    let ticking = false;
+    el.addEventListener('scroll', () => {
+      if (!ticking){
+        requestAnimationFrame(()=>{ update(); ticking=false; });
+        ticking = true;
+      }
+    }, {passive:true});
 
-    const dTitle = document.getElementById('dTitle');
-    const dMeta = document.getElementById('dMeta');
-    const dPrice = document.getElementById('dPrice');
-    const dDesc = document.getElementById('dDesc');
-    const closeViewer = document.getElementById('closeViewer');
+    // Update on resize and after small delay (images load async)
+    window.addEventListener('resize', update, {passive:true});
+    setTimeout(update, 80);
+    setTimeout(update, 300);
+  }
 
-    function nearestIndex(sc){ const w=sc.clientWidth||1; return Math.round((sc.scrollLeft||0)/w); }
-    function updateIndicator(sc){
-      const n = sc.children.length || 1;
-      const i = Math.max(0, Math.min(nearestIndex(sc), n-1));
-      indicator.textContent = (i+1)+' / '+n;
-      const ds = dots.querySelectorAll('.dot');
-      ds.forEach((d,di)=> d.classList.toggle('is-active', di===i));
-      ds.forEach((d,di)=> d.setAttribute('aria-current', di===i ? 'true':'false'));
-    }
+  function wireCarousels(ctx){
+    const sels = ['.media[data-carousel]', '.slides'];
+    sels.forEach(sel => {
+      ctx.querySelectorAll(sel).forEach(installCarousel);
+    });
+  }
 
-    function openViewer(item){
-      // Build slides
-      slides.innerHTML=''; dots.innerHTML='';
-      const mediaList = (item.images||[]);
-      mediaList.forEach((m,idx)=>{
-        const wrap = el('div','slide');
-        const im = new Image(); im.decoding='async'; im.loading='eager'; im.src = m.url || ''; im.alt = m.alt || (item.title||'Image');
-        im.onerror = ()=>{ im.onerror=null; im.src='data:image/svg+xml;utf8,'+encodeURIComponent('<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 400 500\"><rect width=\"400\" height=\"500\" fill=\"#111\"/><text x=\"200\" y=\"260\" text-anchor=\"middle\" fill=\"#666\" font-family=\"system-ui\" font-size=\"24\">Image</text></svg>'); };
-        wrap.appendChild(im); slides.appendChild(wrap);
-        const d = el('div','dot'); d.setAttribute('role','button'); d.setAttribute('aria-label','Go to slide '+(idx+1)); dots.appendChild(d);
-        d.addEventListener('click', ()=> slides.scrollTo({left: idx*(slides.clientWidth||1), behavior:'smooth'}));
-      });
-      if (mediaList.length===0){ const wrap=el('div','slide'); const im=new Image(); im.src='data:image/svg+xml;utf8,'+encodeURIComponent('<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 400 500\"><rect width=\"400\" height=\"500\" fill=\"#111\"/></svg>'); wrap.appendChild(im); slides.appendChild(wrap); }
-
-      dTitle.textContent = item.title || 'Item';
-      dMeta.textContent = [item.brand,item.category,item.color,item.material].filter(Boolean).join(' • ');
-      dPrice.textContent = item.price!=null ? ('$'+item.price) : '';
-      dDesc.textContent = item.description || '';
-
-      overlay.classList.add('open'); overlay.setAttribute('aria-hidden','false');
-      viewer.classList.add('open'); viewer.setAttribute('aria-hidden','false');
-      document.documentElement.classList.add('viewer-open');
-
-      updateIndicator(slides);
-    }
-
-    function close(){
-      overlay.classList.remove('open'); overlay.setAttribute('aria-hidden','true');
-      viewer.classList.remove('open'); viewer.setAttribute('aria-hidden','true');
-      document.documentElement.classList.remove('viewer-open');
-    }
-
-    overlay.addEventListener('click', close);
-    closeViewer.addEventListener('click', close);
-    window.addEventListener('keydown', (e)=>{ if (e.key==='Escape') close(); });
-
-    // Swipe fallback for iOS
-    (function(){
-      const SEL = '.slides';
-      function install(sc){
-        if (!sc || sc.__iosSwipe) return;
-        sc.__iosSwipe = true;
-        let sx=0,lx=0,st=0;
-        sc.addEventListener('touchstart', e=>{ const t=e.changedTouches[0]; sx=lx=t.clientX; st=Date.now(); }, {passive:true});
-        sc.addEventListener('touchmove', e=>{ lx=e.changedTouches[0].clientX; }, {passive:true});
-        sc.addEventListener('touchend', ()=>{
-          const dx = lx - sx, dt = Math.max(1, Date.now()-st), w = sc.clientWidth||1;
-          const fast = Math.abs(dx)/dt > .6, thr = Math.min(.22*w, 160);
-          let dir = 0;
-          if (dx < -thr || (dx < -24 && fast)) dir = 1;
-          if (dx >  thr || (dx >  24 && fast)) dir = -1;
-          if (dir){
-            const idx = Math.round((sc.scrollLeft||0)/w);
-            const target = Math.max(0, Math.min(idx+dir, Math.ceil((sc.scrollWidth-w)/w)));
-            sc.scrollTo({left: target*w, behavior:'smooth'});
+  // Observe DOM for newly opened viewers/cards
+  const mo = new MutationObserver(muts => {
+    muts.forEach(m => {
+      if (m.addedNodes){
+        m.addedNodes.forEach(n => {
+          if (!(n instanceof Element)) return;
+          if (n.matches && (n.matches('.card') || n.matches('.sheet') || n.querySelector('.card,.sheet'))){
+            attachNewBadges();
+            wireCarousels(n);
           }
-        }, {passive:true});
-        sc.addEventListener('scroll', ()=> updateIndicator(sc), {passive:true});
-        window.addEventListener('resize', ()=> updateIndicator(sc), {passive:true});
+        });
       }
-      const mo = new MutationObserver(()=>{
-        document.querySelectorAll(SEL).forEach(install);
-      });
-      mo.observe(document.body, {subtree:true, childList:true});
-    })();
+    });
+  });
+  mo.observe(document.documentElement, {subtree:true, childList:true});
 
-    // Expose createCard for potential re-renders
-    window.createCard = createCard;
-  })();
-  </script>
+  window.addEventListener('load', () => { attachNewBadges(); wireCarousels(document); });
+  attachNewBadges(); wireCarousels(document);
+})();
+</script>
 
-  <script>
-  // Search overlay: ranking, highlighting, keyboard nav, focus trap
-  (function(){
-    const overlay = document.getElementById('search-overlay');
-    const openBtn = document.querySelector('.search-btn');
-    const input = document.getElementById('global-search-input');
-    const closeBtn = document.getElementById('search-close-btn');
-    const clearBtn = document.getElementById('search-clear-btn');
-    const list = document.getElementById('search-list');
-    const metaLine = document.getElementById('search-meta');
-    let _cards = []; let activeIndex = -1; let lastFocus=null;
 
-    function refreshCards(){ _cards = Array.from(document.querySelectorAll('.card')); }
-    const mo = new MutationObserver(refreshCards);
-    mo.observe(document.body, {childList:true, subtree:true});
+<script>
+document.addEventListener('cms-data-ready', function(){
+  // Try to see if the grid is empty and display a friendly message
+  const grid = document.getElementById('grid');
+  if (!grid) return;
+  // If no items added by the original code, add an empty state
+  const hasItems = grid.children && grid.children.length > 0;
+  if (!hasItems && window.DATA && Array.isArray(window.DATA.products) && window.DATA.products.length === 0){
+    grid.innerHTML = '<div style="padding:40px; color:#bdbdbd; font:500 15px system-ui; text-align:center; width:100%;">No products yet.<br><span style="opacity:.8">Add products in <code>/admin</code> and they will appear here.</span></div>';
+  }
+});
+</script>
 
-    function words(q){ return (q||'').toLowerCase().trim().split(/\s+/).filter(Boolean); }
-    function scoreCard(card, terms){
-      if (!terms.length) return 1;
-      const ds = card.dataset || {};
-      const fields = {
-        brand:(ds.brand||'').toLowerCase(),
-        category:(ds.category||'').toLowerCase(),
-        color:(ds.color||'').toLowerCase(),
-        material:(ds.material||'').toLowerCase(),
-        tags:(ds.tags||'').toLowerCase(),
-        text:(card.innerText||'').toLowerCase()
-      };
-      let score=0; const w={brand:5,category:4,color:3,material:3,tags:2,text:1};
-      terms.forEach(t=>{ for(const k in fields){ if(fields[k].includes(t)) score+=w[k]; } });
-      return score;
-    }
-    function highlight(text, terms){
-      if (!terms.length || !text) return text;
-      let out = text;
-      terms.forEach(t=>{
-        const re = new RegExp('('+t.replace(/[.*+?^${}()|[\\]\\\\]/g,'\\$&')+')','ig');
-        out = out.replace(re,'<mark class="hl">$1</mark>');
-      });
-      return out;
-    }
-
-    function emptyState(){
-      list.innerHTML='';
-      const wrap = document.createElement('div');
-      wrap.className='search-empty';
-      wrap.innerHTML = '<div>No matches.</div>';
-      const sugs = document.createElement('div'); sugs.className='sugs';
-      ['black tote','nylon','mini bag','ivory','suede','crossbody'].forEach(txt=>{
-        const a=document.createElement('a'); a.href='#'; a.innerHTML='<svg viewBox="0 0 16 16"><path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001l3.85 3.85a1 1 0 0 0 1.415-1.415l-3.867-3.833zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"/></svg>'+txt;
-        a.addEventListener('click', (e)=>{ e.preventDefault(); input.value=txt; filterGrid(txt); input.focus(); });
-        sugs.appendChild(a);
-      });
-      wrap.appendChild(sugs); list.appendChild(wrap);
-    }
-
-    function cardThumb(c){
-      const img = c.querySelector('.media img'); if (img && img.src) return img.src;
-      const poster = c.querySelector('video')?.poster; return poster||'';
-    }
-    function goToCard(c){
-      closeSearch();
-      c.scrollIntoView({behavior:'smooth',block:'center'});
-      c.classList.remove('glow'); setTimeout(()=> c.classList.add('glow'), 60);
-    }
-
-    function renderList(matches, terms){
-      list.innerHTML='';
-      if (!matches.length){ emptyState(); return; }
-      matches.slice(0,60).forEach((c,i)=>{
-        const row = document.createElement('div'); row.className='search-item'; row.setAttribute('role','option'); row.setAttribute('data-index', String(i)); row.tabIndex=-1;
-        const title = c.querySelector('.title')?.textContent || 'Item';
-        const sub = [c.dataset.brand,c.dataset.category,c.dataset.color,c.dataset.material].filter(Boolean).join(' • ');
-        row.innerHTML = '<img class="search-thumb" src="'+cardThumb(c)+'" alt="" />'
-                       + '<div><div class="search-title">'+highlight(title,terms)+'</div><div class="search-sub">'+highlight(sub,terms)+'</div></div>'
-                       + '<div class="search-price">'+(c.dataset.price?('$'+c.dataset.price):'')+'</div>';
-        row.addEventListener('click', ()=> goToCard(c));
-        list.appendChild(row);
-        setTimeout(()=> row.classList.add('show'), 20 + i*20);
-      });
-      activeIndex = matches.length ? 0 : -1; updateActive();
-    }
-    function updateActive(){
-      const items = Array.from(list.querySelectorAll('.search-item'));
-      items.forEach((it,i)=>{
-        const sel = i===activeIndex;
-        it.setAttribute('aria-selected', sel?'true':'false');
-        it.classList.toggle('is-active', sel);
-        if (sel) it.scrollIntoView({block:'nearest'});
-      });
-    }
-
-    function filterGrid(q){
-      const terms = words(q);
-      refreshCards();
-      const scored = [];
-      _cards.forEach(c=>{
-        const s = scoreCard(c, terms);
-        const match = terms.length===0 || s>0;
-        c.classList.toggle('is-filtered-out', !match);
-        if (match) scored.push({c,s});
-      });
-      scored.sort((a,b)=> b.s - a.s);
-      const matches = scored.map(x=>x.c);
-      if (metaLine){
-        metaLine.innerHTML = terms.length ? ('Showing <strong>'+matches.length+'</strong> results for ‘<strong>'+q+'</strong>’') : ('Showing <strong>'+matches.length+'</strong> results');
-      }
-      renderList(matches, terms);
-    }
-
-    function openSearch(e){
-      if (e){ e.preventDefault(); e.stopImmediatePropagation(); }
-      lastFocus = document.activeElement;
-      overlay.classList.add('open'); overlay.setAttribute('aria-hidden','false');
-      setTimeout(()=> input && input.focus(), 30);
-      filterGrid(input ? input.value : '');
-      trapFocus(true);
-    }
-    function closeSearch(e){
-      if (e){ e.preventDefault(); e.stopImmediatePropagation(); }
-      overlay.classList.remove('open'); overlay.setAttribute('aria-hidden','true');
-      trapFocus(false);
-      setTimeout(()=>{ if(lastFocus && lastFocus.focus) lastFocus.focus(); }, 40);
-    }
-    function onKey(e){
-      if (overlay.getAttribute('aria-hidden')==='true') return;
-      const items = Array.from(list.querySelectorAll('.search-item'));
-      if (e.key==='ArrowDown'){ e.preventDefault(); if (items.length){ activeIndex=Math.min(items.length-1, activeIndex+1); updateActive(); } }
-      else if (e.key==='ArrowUp'){ e.preventDefault(); if (items.length){ activeIndex=Math.max(0, activeIndex-1); updateActive(); } }
-      else if (e.key==='Enter'){ if (items.length && activeIndex>=0){ items[activeIndex].click(); } }
-      else if (e.key==='Escape'){ closeSearch(e); }
-    }
-    function trapFocus(enable){
-      const panel = overlay.querySelector('.search-panel'); if (!panel) return;
-      if (!enable){ overlay.onkeydown=null; return; }
-      overlay.onkeydown = (e)=>{
-        if (e.key!=='Tab') return;
-        const nodes = panel.querySelectorAll('button, [href], input, select, [tabindex]:not([tabindex="-1"])');
-        if (!nodes.length) return;
-        const first = nodes[0], last = nodes[nodes.length-1];
-        if (e.shiftKey && document.activeElement===first){ e.preventDefault(); last.focus(); }
-        else if (!e.shiftKey && document.activeElement===last){ e.preventDefault(); first.focus(); }
-      };
-    }
-
-    document.querySelector('.search-btn')?.addEventListener('click', openSearch, true);
-    document.getElementById('search-close-btn')?.addEventListener('click', closeSearch, true);
-    window.addEventListener('keydown', (e)=>{ if (e.key==='/' && !e.metaKey && !e.ctrlKey && !e.altKey) openSearch(e); }, true);
-    window.addEventListener('keydown', onKey, true);
-    input?.addEventListener('input', (e)=> filterGrid(e.target.value));
-    clearBtn?.addEventListener('click', (e)=>{ e.preventDefault(); input&&(input.value=''); filterGrid(''); closeSearch(); });
-  })();
-  </script>
 </body>
 </html>

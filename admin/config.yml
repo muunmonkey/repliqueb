@@ -1,35 +1,47 @@
 backend:
   name: git-gateway
   branch: main
-media_folder: "images/uploads"
-public_folder: "/images/uploads"
+
+media_folder: "static/uploads"
+public_folder: "/uploads"
 
 collections:
-  - name: "catalog"
-    label: "Catalog"
+  - label: "Catalog"
+    name: "catalog"
     files:
-      - file: "data/items.json"
-        label: "Products"
+      - label: "Products"
         name: "products"
+        file: "data/products.json"
+        format: "json"
         fields:
           - label: "Products"
             name: "products"
             widget: "list"
-            summary: "{{fields.brand}} • {{fields.title}}"
+            summary: "{{fields.title}} – {{fields.brand}}"
             fields:
-              - {label: "Slug", name: "slug", widget: "string"}
-              - {label: "Title", name: "title", widget: "string"}
-              - {label: "Brand", name: "brand", widget: "string"}
-              - {label: "Category", name: "category", widget: "string"}
-              - {label: "Color", name: "color", widget: "string", required: false}
-              - {label: "Material", name: "material", widget: "string", required: false}
-              - {label: "Price (USD)", name: "price", widget: "number", required: false, value_type: "float", min: 0}
-              - {label: "Tags", name: "tags", widget: "list", required: false}
+              - { label: "Slug", name: "slug", widget: "string", hint: "URL-safe unique id (e.g. brand-model-color)" }
+              - { label: "Title", name: "title", widget: "string" }
+              - { label: "Brand", name: "brand", widget: "string", required: false }
+              - { label: "Category", name: "category", widget: "string", required: false }
+              - { label: "Material", name: "material", widget: "string", required: false }
+              - { label: "Color", name: "color", widget: "string", required: false }
+              - { label: "Badges", name: "badges", widget: "list", required: false }
+              - { label: "Description", name: "description", widget: "text", required: false }
+              - label: "Specs"
+                name: "specs"
+                widget: "list"
+                required: false
+                fields:
+                  - { label: "Icon", name: "icon", widget: "string", hint: "ruler, feather, sparkle…" }
+                  - { label: "Text", name: "text", widget: "string" }
               - label: "Images"
                 name: "images"
                 widget: "list"
+                required: false
                 fields:
-                  - {label: "URL", name: "url", widget: "string"}
-                  - {label: "Alt", name: "alt", widget: "string", required: false}
-              - {label: "Video URL", name: "video", widget: "string", required: false}
-              - {label: "Description", name: "description", widget: "text", required: false}
+                  - { label: "Type", name: "type", widget: "select", options: ["image","video"], required: false }
+                  - { label: "Src", name: "src", widget: "string", hint: "URL or path starting with /uploads/…" }
+                  - { label: "Poster", name: "poster", widget: "string", required: false }
+                  - { label: "Alt", name: "alt", widget: "string", required: false }
+              - { label: "Original Link", name: "original", widget: "string", required: false }
+              - { label: "Monogram", name: "mono", widget: "string", required: false }
