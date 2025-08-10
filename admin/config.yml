@@ -1,5 +1,6 @@
 backend:
-  name: git-gateway
+  name: github
+  repo: muunmonkey/repliqueb   # e.g., yourname/handbag-site
   branch: main
 
 media_folder: "static/uploads"
